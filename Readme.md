@@ -1,7 +1,7 @@
 # Проект «Большое путешествие»
 
-* Студент: [Евгений Юранев](https://up.htmlacademy.ru/ecmascript/14/user/1148763).
-* Наставник: `Неизвестно`.
+- Студент: [Евгений Юранев](https://up.htmlacademy.ru/ecmascript/14/user/1148763).
+- Наставник: [Сергей Локтионов](https://htmlacademy.ru/profile/id1526007).
 
 ---
 
