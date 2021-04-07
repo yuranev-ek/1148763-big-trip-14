@@ -17,28 +17,20 @@ const render = (container, template, place = 'beforeend') => {
 const siteHeaderElement = document.querySelector('.trip-main');
 render(siteHeaderElement, createRouteInformationTemplate(), 'afterbegin');
 
-const siteInfoElement = siteHeaderElement.querySelector(
-  '.trip-main__trip-info'
-);
+const siteInfoElement = siteHeaderElement.querySelector('.trip-main__trip-info');
 render(siteInfoElement, createTotalCostTemplate());
 
-const siteMenuElement = siteHeaderElement.querySelector(
-  '.trip-controls__navigation'
-);
+const siteMenuElement = siteHeaderElement.querySelector('.trip-controls__navigation');
 render(siteMenuElement, createMenuTemplate());
 
-const siteFiltersElement = siteHeaderElement.querySelector(
-  '.trip-controls__filters'
-);
+const siteFiltersElement = siteHeaderElement.querySelector('.trip-controls__filters');
 render(siteFiltersElement, createFiltersTemplate());
 
 const siteEventsElement = document.querySelector('.trip-events');
 render(siteEventsElement, createSortTemplate());
 render(siteEventsElement, createListOfEventsTemplate());
 
-const siteListOfEventsTemplate = siteEventsElement.querySelector(
-  '.trip-events__list'
-);
+const siteListOfEventsTemplate = siteEventsElement.querySelector('.trip-events__list');
 render(siteListOfEventsTemplate, createEditEventTemplate());
 
 const EVENT_COUNT = 3;
