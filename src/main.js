@@ -6,6 +6,7 @@ import { createSortTemplate } from './view/sort.js';
 import { createListOfEventsTemplate } from './view/list-of-events.js';
 import { createEditEventTemplate } from './view/edit-event.js';
 import { createEventTemplate } from './view/event.js';
+import { createNewEventTemplate } from './view/new-event.js';
 
 const render = (container, template, place = 'beforeend') => {
   if (container) {
@@ -44,3 +45,5 @@ const EVENT_COUNT = 3;
 for (let i = 0; i < EVENT_COUNT; i++) {
   render(siteListOfEventsTemplate, createEventTemplate(), 'beforeend');
 }
+
+render(siteListOfEventsTemplate, createNewEventTemplate());
