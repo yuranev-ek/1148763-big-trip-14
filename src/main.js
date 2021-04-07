@@ -9,18 +9,20 @@ const render = (container, template, place = 'beforeend') => {
   }
 };
 
-const siteMainElement = document.querySelector('.trip-main');
-render(siteMainElement, createRouteInformationTemplate(), 'afterbegin');
+const siteHeaderElement = document.querySelector('.trip-main');
+render(siteHeaderElement, createRouteInformationTemplate(), 'afterbegin');
 
-const siteInfoElement = siteMainElement.querySelector('.trip-main__trip-info');
+const siteInfoElement = siteHeaderElement.querySelector(
+  '.trip-main__trip-info'
+);
 render(siteInfoElement, createTotalCostTemplate());
 
-const siteMenuElement = siteMainElement.querySelector(
+const siteMenuElement = siteHeaderElement.querySelector(
   '.trip-controls__navigation'
 );
 render(siteMenuElement, createMenuTemplate());
 
-const siteFiltersElement = siteMainElement.querySelector(
+const siteFiltersElement = siteHeaderElement.querySelector(
   '.trip-controls__filters'
 );
 render(siteFiltersElement, createFiltersTemplate());
