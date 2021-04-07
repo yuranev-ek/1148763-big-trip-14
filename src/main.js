@@ -5,6 +5,7 @@ import { createFiltersTemplate } from './view/filters.js';
 import { createSortTemplate } from './view/sort.js';
 import { createListOfEventsTemplate } from './view/list-of-events.js';
 import { createEditEventTemplate } from './view/edit-event.js';
+import { createEventTemplate } from './view/event.js';
 
 const render = (container, template, place = 'beforeend') => {
   if (container) {
@@ -38,3 +39,8 @@ const siteListOfEventsTemplate = siteEventsElement.querySelector(
   '.trip-events__list'
 );
 render(siteListOfEventsTemplate, createEditEventTemplate());
+
+const EVENT_COUNT = 3;
+for (let i = 0; i < EVENT_COUNT; i++) {
+  render(siteListOfEventsTemplate, createEventTemplate(), 'beforeend');
+}
