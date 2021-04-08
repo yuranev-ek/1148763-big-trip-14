@@ -35,7 +35,7 @@ render(siteListOfEventsTemplate, createEditEventTemplate());
 
 const EVENT_COUNT = 3;
 for (let i = 0; i < EVENT_COUNT; i++) {
-  render(siteListOfEventsTemplate, createEventTemplate(), 'beforeend');
+  render(siteListOfEventsTemplate, createEventTemplate());
 }
 
 render(siteListOfEventsTemplate, createNewEventTemplate());
