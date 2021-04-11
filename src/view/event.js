@@ -1,22 +1,57 @@
+import { formatDate, getDiffOfDates } from '../utils.js';
+import { DATE_FORMAT } from '../const.js';
+
+const diffConvertedTimeOfEvent = (dateEnd, dateStart) => {
+  const diffMinutesOfEvent = getDiffOfDates(dateEnd, dateStart, 'minute') % 60;
+  const diffHoursOfEvent = getDiffOfDates(dateEnd, dateStart, 'hour') % 24;
+  const diffDaysOfEvent = getDiffOfDates(dateEnd, dateStart);
+  let convertedTime = '';
+
+  const addZero = (num) => {
+    return `${num}`.length === 1 ? `0${num}` : num;
+  };
+
+  if (diffDaysOfEvent) {
+    convertedTime += `${addZero(diffDaysOfEvent)}D`;
+  }
+
+  if (diffHoursOfEvent || diffDaysOfEvent) {
+    convertedTime += ` ${addZero(diffHoursOfEvent)}H`;
+  }
+
+  convertedTime += ` ${addZero(diffMinutesOfEvent)}M`;
+
+  return convertedTime.trim();
+};
+
 export const createEventTemplate = (event) => {
-  const { routeType, destination, isFavorite, basePrice } = event;
+  const { routeType, destination, isFavorite, basePrice, dateStart, dateEnd } = event;
 
   const srcToEventIcon = `img/icons/${routeType}.png`;
   const classByIsFavorite = isFavorite ? 'event__favorite-btn--active' : '';
+
+  const attrDateOfDateStart = formatDate(dateStart, DATE_FORMAT.ATTR_DATE);
+  const attrDateTimeOfDateStart = formatDate(dateStart, DATE_FORMAT.ATTR_DATE_TIME);
+  const attrDateTimeOfDateEnd = formatDate(dateEnd, DATE_FORMAT.ATTR_DATE_TIME);
+  const startEventTime = formatDate(dateStart, DATE_FORMAT.TIME);
+  const endEventTime = formatDate(dateEnd, DATE_FORMAT.TIME);
+  const eventDay = formatDate(dateStart, DATE_FORMAT.DAY);
+  const diffTime = diffConvertedTimeOfEvent(dateEnd, dateStart);
+
   return `
     <div class="event">
-        <time class="event__date" datetime="2019-03-18">MAR 18</time>
+        <time class="event__date" datetime="${attrDateOfDateStart}">${eventDay}</time>
         <div class="event__type">
             <img class="event__type-icon" width="42" height="42" src="${srcToEventIcon}" alt="${routeType}">
         </div>
         <h3 class="event__title">${routeType} ${destination.name}</h3>
         <div class="event__schedule">
             <p class="event__time">
-            <time class="event__start-time" datetime="2019-03-18T14:30">14:30</time>
+            <time class="event__start-time" datetime="${attrDateTimeOfDateStart}">${startEventTime}</time>
             &mdash;
-            <time class="event__end-time" datetime="2019-03-18T16:05">16:05</time>
+            <time class="event__end-time" datetime="${attrDateTimeOfDateEnd}">${endEventTime}</time>
             </p>
-            <p class="event__duration">01H 35M</p>
+            <p class="event__duration">${diffTime}</p>
         </div>
         <p class="event__price">
             &euro;&nbsp;<span class="event__price-value">${basePrice}</span>

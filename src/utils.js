@@ -20,6 +20,14 @@ export const addDays = (num) => {
   return dayjs().add(num, 'day').format();
 };
 
+export const formatDate = (date, format) => {
+  return dayjs(date).format(format);
+};
+
+export const getDiffOfDates = (from, to, type = 'day') => {
+  return dayjs(from).diff(dayjs(to), type);
+};
+
 const getRandomDate = (from, to) => {
   const fromMilli = dayjs(from).valueOf();
   const max = dayjs(to).valueOf() - fromMilli;
@@ -31,8 +39,7 @@ const getRandomDate = (from, to) => {
 
 export const getRandomPeriod = (from, to) => {
   const dateStart = getRandomDate(from, to);
-  const nextDayAfterDateStart = dayjs(dateStart).add(1, 'day');
-  const dateEnd = getRandomDate(nextDayAfterDateStart, to);
+  const dateEnd = getRandomDate(dateStart, to);
 
   return {
     dateStart,
