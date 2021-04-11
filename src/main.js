@@ -11,6 +11,9 @@ import { createEventTemplate } from './view/event.js';
 // mocks
 import { generateEvent } from './mock/event.js';
 
+// utils
+import { isAfter } from './utils.js';
+
 const render = (container, template, place = 'beforeend') => {
   if (container) {
     container.insertAdjacentHTML(place, template);
@@ -18,7 +21,12 @@ const render = (container, template, place = 'beforeend') => {
 };
 
 const EVENT_COUNT = 15;
-const events = new Array(EVENT_COUNT).fill().map(generateEvent);
+const events = new Array(EVENT_COUNT)
+  .fill()
+  .map(generateEvent)
+  .sort((a, b) => {
+    return isAfter(a.dateStart, b.dateStart) ? 1 : -1;
+  });
 
 const siteHeaderElement = document.querySelector('.trip-main');
 render(siteHeaderElement, createRouteInformationTemplate(), 'afterbegin');

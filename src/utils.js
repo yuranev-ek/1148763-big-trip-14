@@ -28,6 +28,10 @@ export const getDiffOfDates = (from, to, type = 'day') => {
   return dayjs(from).diff(dayjs(to), type);
 };
 
+export const isAfter = (date1, date2) => {
+  return dayjs(date1).isAfter(dayjs(date2));
+};
+
 const getRandomDate = (from, to) => {
   const fromMilli = dayjs(from).valueOf();
   const max = dayjs(to).valueOf() - fromMilli;
