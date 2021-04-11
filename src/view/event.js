@@ -1,11 +1,14 @@
-export const createEventTemplate = () => {
+export const createEventTemplate = (event) => {
+  const { routeType } = event;
+
+  const srcToEventIcon = `img/icons/${routeType}.png`;
   return `
     <div class="event">
         <time class="event__date" datetime="2019-03-18">MAR 18</time>
         <div class="event__type">
-            <img class="event__type-icon" width="42" height="42" src="img/icons/drive.png" alt="Event type icon">
+            <img class="event__type-icon" width="42" height="42" src="${srcToEventIcon}" alt="${routeType}">
         </div>
-        <h3 class="event__title">Drive Chamonix</h3>
+        <h3 class="event__title">${routeType} Chamonix</h3>
         <div class="event__schedule">
             <p class="event__time">
             <time class="event__start-time" datetime="2019-03-18T14:30">14:30</time>
