@@ -50,7 +50,7 @@ export const ROUTES = [
   },
 ];
 
-const CITIES = ['Chamonix', 'Paris', 'London', 'Geneva', 'Kazan', 'St. Petersburg'];
+export const CITIES = ['Chamonix', 'Paris', 'London', 'Geneva', 'Kazan', 'St. Petersburg'];
 
 const NUMBERS_OF_SENTENCES = {
   MIN: 1,

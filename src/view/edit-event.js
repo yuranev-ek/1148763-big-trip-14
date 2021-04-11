@@ -1,4 +1,4 @@
-import { ROUTES } from '../mock/event.js';
+import { ROUTES, CITIES } from '../mock/event.js';
 
 const createTypeListOfRoutesTemplate = (routes) => {
   return routes
@@ -13,11 +13,20 @@ const createTypeListOfRoutesTemplate = (routes) => {
     .join('');
 };
 
+const createOptionsOfCities = (cities) => {
+  return cities
+    .map((city) => {
+      return `<option value="${city}"></option>`;
+    })
+    .join('');
+};
+
 export const createEditEventTemplate = (event) => {
-  const { route, destination, isFavorite, basePrice, dateStart, dateEnd } = event;
+  const { route, destination, basePrice, dateStart, dateEnd } = event;
 
   const srcToEventIcon = `img/icons/${route}.png`;
   const typeListOfRoutesTemplate = createTypeListOfRoutesTemplate(ROUTES);
+  const optionsOfCitiesTemplate = createOptionsOfCities(CITIES);
 
   return `
     <li class="trip-events__item">
@@ -44,9 +53,7 @@ export const createEditEventTemplate = (event) => {
                 </label>
                 <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
                 <datalist id="destination-list-1">
-                    <option value="Amsterdam"></option>
-                    <option value="Geneva"></option>
-                    <option value="Chamonix"></option>
+                    ${optionsOfCitiesTemplate}
                 </datalist>
             </div>
 
