@@ -1,7 +1,8 @@
 import { getRandomInteger, getRandomBoolean, subtractDays, addDays, getRandomPeriod } from '../utils.js';
 import { LOREM_SENTENCES } from '../const.js';
+import { generateOffers, OFFERS } from './offer.js';
 
-const TYPE_OF_ROUTE = {
+export const TYPE_OF_ROUTE = {
   TRIP: 'trip',
   STOP: 'stop',
 };
@@ -118,16 +119,19 @@ const generateBasePrice = () => {
 };
 
 export const generateEvent = () => {
+  const route = generateRoute();
   const minDateStart = subtractDays(DATE_META.DAYS_BEFORE);
   const maxDateEnd = addDays(DATE_META.DAYS_AFTER);
   const period = getRandomPeriod(minDateStart, maxDateEnd);
+  const numberOfOffers = getRandomInteger(0, OFFERS[route.type].length);
 
   return {
-    route: generateRoute(),
+    route,
     destination: generateDestination(),
     isFavorite: getRandomBoolean(),
     basePrice: generateBasePrice(),
     dateStart: period.dateStart,
     dateEnd: period.dateEnd,
+    offers: generateOffers(route.type, numberOfOffers),
   };
 };
