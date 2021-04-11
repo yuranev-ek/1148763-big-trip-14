@@ -132,6 +132,9 @@ export const generateEvent = () => {
     basePrice: generateBasePrice(),
     dateStart: period.dateStart,
     dateEnd: period.dateEnd,
-    offers: generateOffers(route.type, numberOfOffers),
+    offers: {
+      type: route.type,
+      list: generateOffers(route.type, numberOfOffers),
+    },
   };
 };

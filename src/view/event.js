@@ -52,7 +52,7 @@ export const createEventTemplate = (event) => {
   const eventDay = formatDate(dateStart, DATE_FORMAT.DAY);
   const diffTime = diffConvertedTimeOfEvent(dateEnd, dateStart);
 
-  const offersTemplate = createOffersTemplate(offers);
+  const offersTemplate = createOffersTemplate(offers.list);
 
   return `
     <div class="event">

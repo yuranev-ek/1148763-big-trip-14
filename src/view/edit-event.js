@@ -1,6 +1,7 @@
 import { ROUTES, CITIES } from '../mock/event.js';
 import { formatDate } from '../utils.js';
 import { DATE_FORMAT } from '../const.js';
+import { OFFERS } from '../mock/offer.js';
 
 const createTypeListOfRoutesTemplate = (routes) => {
   return routes
@@ -23,12 +24,13 @@ const createOptionsOfCities = (cities) => {
     .join('');
 };
 
-const createOffersTemplate = (offers) => {
+const createOffersTemplate = (checkedOffers, offers) => {
   return offers
     .map((offer) => {
+      const checked = checkedOffers.findIndex((it) => it.title === offer.title) !== -1 ? 'checked' : '';
       return `
         <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-${offer.title}" type="checkbox" name="event-${offer.title}" checked>
+            <input class="event__offer-checkbox  visually-hidden" id="event-${offer.title}" type="checkbox" name="event-${offer.title}" ${checked}>
             <label class="event__offer-label" for="event-${offer.title}">
                 <span class="event__offer-title">${offer.title}</span>
                 &plus;&euro;&nbsp;
@@ -48,7 +50,7 @@ export const createEditEventTemplate = (event) => {
   const optionsOfCitiesTemplate = createOptionsOfCities(CITIES);
   const formattedDateStart = formatDate(dateStart, DATE_FORMAT.DATE_TIME);
   const formattedDateEnd = formatDate(dateEnd, DATE_FORMAT.DATE_TIME);
-  const offersTemplate = createOffersTemplate(offers);
+  const offersTemplate = createOffersTemplate(offers.list, OFFERS[offers.type]);
 
   return `
     <li class="trip-events__item">
