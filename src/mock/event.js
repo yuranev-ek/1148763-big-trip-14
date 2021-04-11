@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomBoolean } from '../utils.js';
+import { getRandomInteger, getRandomBoolean, subtractDays, addDays, getRandomPeriod, formatDate } from '../utils.js';
 import { LOREM_SENTENCES } from '../const.js';
 
 const ROUTE_TYPES = [
@@ -30,6 +30,11 @@ const PICTURE_META = {
 const BASE_PRICE_META = {
   MIN: 50,
   MAX: 1000,
+};
+
+const DATE_META = {
+  DAYS_BEFORE: 10,
+  DAYS_AFTER: 30,
 };
 
 const generateRouteType = () => {
@@ -78,10 +83,16 @@ const generateBasePrice = () => {
 };
 
 export const generateEvent = () => {
+  const minDateStart = subtractDays(DATE_META.DAYS_BEFORE);
+  const maxDateEnd = addDays(DATE_META.DAYS_AFTER);
+  const period = getRandomPeriod(minDateStart, maxDateEnd);
+
   return {
     routeType: generateRouteType(),
     destination: generateDestination(),
     isFavorite: getRandomBoolean(),
     basePrice: generateBasePrice(),
+    dateStart: period.dateStart,
+    dateEnd: period.dateEnd,
   };
 };
