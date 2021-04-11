@@ -39,7 +39,7 @@ const createOffersTemplate = (offers) => {
 };
 
 export const createEventTemplate = (event) => {
-  const { route, destination, isFavorite, basePrice, dateStart, dateEnd } = event;
+  const { route, destination, isFavorite, basePrice, dateStart, dateEnd, offers } = event;
 
   const srcToEventIcon = `img/icons/${route}.png`;
   const classByIsFavorite = isFavorite ? 'event__favorite-btn--active' : '';
@@ -52,7 +52,7 @@ export const createEventTemplate = (event) => {
   const eventDay = formatDate(dateStart, DATE_FORMAT.DAY);
   const diffTime = diffConvertedTimeOfEvent(dateEnd, dateStart);
 
-  const offersTemplate = createOffersTemplate(event.offers);
+  const offersTemplate = createOffersTemplate(offers);
 
   return `
     <div class="event">
