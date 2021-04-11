@@ -1,5 +1,5 @@
 export const createEventTemplate = (event) => {
-  const { routeType, destination, isFavorite } = event;
+  const { routeType, destination, isFavorite, basePrice } = event;
 
   const srcToEventIcon = `img/icons/${routeType}.png`;
   const classByIsFavorite = isFavorite ? 'event__favorite-btn--active' : '';
@@ -19,7 +19,7 @@ export const createEventTemplate = (event) => {
             <p class="event__duration">01H 35M</p>
         </div>
         <p class="event__price">
-            &euro;&nbsp;<span class="event__price-value">160</span>
+            &euro;&nbsp;<span class="event__price-value">${basePrice}</span>
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">

@@ -27,6 +27,15 @@ const PICTURE_META = {
   SRC: 'http://picsum.photos/300/200?r=',
 };
 
+const BASE_PRICE_META = {
+  MIN: 50,
+  MAX: 1000,
+};
+
+const generateRouteType = () => {
+  return ROUTE_TYPES[getRandomInteger(0, ROUTE_TYPES.length - 1)];
+};
+
 const generateDescription = (num) => {
   const SLICED_LOREM_SENTENCES = LOREM_SENTENCES.slice();
   const sentences = [];
@@ -64,10 +73,15 @@ const generateDestination = () => {
   };
 };
 
+const generateBasePrice = () => {
+  return getRandomInteger(BASE_PRICE_META.MIN, BASE_PRICE_META.MAX);
+};
+
 export const generateEvent = () => {
   return {
-    routeType: ROUTE_TYPES[getRandomInteger(0, ROUTE_TYPES.length - 1)],
+    routeType: generateRouteType(),
     destination: generateDestination(),
     isFavorite: getRandomBoolean(),
+    basePrice: generateBasePrice(),
   };
 };
