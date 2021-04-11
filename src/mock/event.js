@@ -126,7 +126,7 @@ export const generateEvent = () => {
   const numberOfOffers = getRandomInteger(0, OFFERS[route.type].length);
 
   return {
-    route,
+    route: route.name,
     destination: generateDestination(),
     isFavorite: getRandomBoolean(),
     basePrice: generateBasePrice(),
