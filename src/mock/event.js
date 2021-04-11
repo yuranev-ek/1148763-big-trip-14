@@ -1,17 +1,52 @@
-import { getRandomInteger, getRandomBoolean, subtractDays, addDays, getRandomPeriod, formatDate } from '../utils.js';
+import { getRandomInteger, getRandomBoolean, subtractDays, addDays, getRandomPeriod } from '../utils.js';
 import { LOREM_SENTENCES } from '../const.js';
 
-const ROUTE_TYPES = [
-  'Taxi',
-  'Bus',
-  'Train',
-  'Ship',
-  'Transport',
-  'Drive',
-  'Flight',
-  'Check-in',
-  'Sightseeing',
-  'Restaurant',
+const TYPE_OF_ROUTE = {
+  TRIP: 'trip',
+  STOP: 'stop',
+};
+
+const ROUTES = [
+  {
+    name: 'taxi',
+    type: TYPE_OF_ROUTE.TRIP,
+  },
+  {
+    name: 'bus',
+    type: TYPE_OF_ROUTE.TRIP,
+  },
+  {
+    name: 'train',
+    type: TYPE_OF_ROUTE.TRIP,
+  },
+  {
+    name: 'ship',
+    type: TYPE_OF_ROUTE.TRIP,
+  },
+  {
+    name: 'transport',
+    type: TYPE_OF_ROUTE.TRIP,
+  },
+  {
+    name: 'drive',
+    type: TYPE_OF_ROUTE.TRIP,
+  },
+  {
+    name: 'flight',
+    type: TYPE_OF_ROUTE.TRIP,
+  },
+  {
+    name: 'check-in',
+    type: TYPE_OF_ROUTE.STOP,
+  },
+  {
+    name: 'restaurant',
+    type: TYPE_OF_ROUTE.STOP,
+  },
+  {
+    name: 'sightseeing',
+    type: TYPE_OF_ROUTE.STOP,
+  },
 ];
 
 const CITIES = ['Chamonix', 'Paris', 'London', 'Geneva', 'Kazan', 'St. Petersburg'];
@@ -37,8 +72,8 @@ const DATE_META = {
   DAYS_AFTER: 30,
 };
 
-const generateRouteType = () => {
-  return ROUTE_TYPES[getRandomInteger(0, ROUTE_TYPES.length - 1)];
+const generateRoute = () => {
+  return ROUTES[getRandomInteger(0, ROUTES.length - 1)];
 };
 
 const generateDescription = (num) => {
@@ -88,7 +123,7 @@ export const generateEvent = () => {
   const period = getRandomPeriod(minDateStart, maxDateEnd);
 
   return {
-    routeType: generateRouteType(),
+    route: generateRoute(),
     destination: generateDestination(),
     isFavorite: getRandomBoolean(),
     basePrice: generateBasePrice(),

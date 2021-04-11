@@ -25,9 +25,9 @@ const diffConvertedTimeOfEvent = (dateEnd, dateStart) => {
 };
 
 export const createEventTemplate = (event) => {
-  const { routeType, destination, isFavorite, basePrice, dateStart, dateEnd } = event;
+  const { route, destination, isFavorite, basePrice, dateStart, dateEnd } = event;
 
-  const srcToEventIcon = `img/icons/${routeType}.png`;
+  const srcToEventIcon = `img/icons/${route.name}.png`;
   const classByIsFavorite = isFavorite ? 'event__favorite-btn--active' : '';
 
   const attrDateOfDateStart = formatDate(dateStart, DATE_FORMAT.ATTR_DATE);
@@ -42,9 +42,9 @@ export const createEventTemplate = (event) => {
     <div class="event">
         <time class="event__date" datetime="${attrDateOfDateStart}">${eventDay}</time>
         <div class="event__type">
-            <img class="event__type-icon" width="42" height="42" src="${srcToEventIcon}" alt="${routeType}">
+            <img class="event__type-icon" width="42" height="42" src="${srcToEventIcon}" alt="${route.name}">
         </div>
-        <h3 class="event__title">${routeType} ${destination.name}</h3>
+        <h3 class="event__title">${route.name} ${destination.name}</h3>
         <div class="event__schedule">
             <p class="event__time">
             <time class="event__start-time" datetime="${attrDateTimeOfDateStart}">${startEventTime}</time>
