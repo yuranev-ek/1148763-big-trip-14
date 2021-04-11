@@ -24,6 +24,20 @@ const diffConvertedTimeOfEvent = (dateEnd, dateStart) => {
   return convertedTime.trim();
 };
 
+const createOffersTemplate = (offers) => {
+  return offers
+    .map(
+      (offer) => `
+      <li class="event__offer">
+        <span class="event__offer-title">${offer.title}</span>
+        &plus;&euro;&nbsp;
+        <span class="event__offer-price">${offer.price}</span>
+      </li>
+  `
+    )
+    .join('');
+};
+
 export const createEventTemplate = (event) => {
   const { route, destination, isFavorite, basePrice, dateStart, dateEnd } = event;
 
@@ -37,6 +51,8 @@ export const createEventTemplate = (event) => {
   const endEventTime = formatDate(dateEnd, DATE_FORMAT.TIME);
   const eventDay = formatDate(dateStart, DATE_FORMAT.DAY);
   const diffTime = diffConvertedTimeOfEvent(dateEnd, dateStart);
+
+  const offersTemplate = createOffersTemplate(event.offers);
 
   return `
     <div class="event">
@@ -58,11 +74,7 @@ export const createEventTemplate = (event) => {
         </p>
         <h4 class="visually-hidden">Offers:</h4>
         <ul class="event__selected-offers">
-            <li class="event__offer">
-            <span class="event__offer-title">Rent a car</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">200</span>
-            </li>
+            ${offersTemplate}
         </ul>
         <button class="event__favorite-btn ${classByIsFavorite}" type="button">
             <span class="visually-hidden">Add to favorite</span>
