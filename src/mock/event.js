@@ -7,7 +7,7 @@ export const TYPE_OF_ROUTE = {
   STOP: 'stop',
 };
 
-const ROUTES = [
+export const ROUTES = [
   {
     name: 'taxi',
     type: TYPE_OF_ROUTE.TRIP,
