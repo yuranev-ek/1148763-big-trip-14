@@ -1,4 +1,4 @@
-import { getRandomInteger } from '../utils.js';
+import { getRandomInteger, getRandomBoolean } from '../utils.js';
 
 const ROUTE_TYPES = [
   'Taxi',
@@ -19,5 +19,6 @@ export const generateEvent = () => {
   return {
     routeType: ROUTE_TYPES[getRandomInteger(0, ROUTE_TYPES.length - 1)],
     destination: CITIES[getRandomInteger(0, CITIES.length - 1)],
+    isFavorite: getRandomBoolean(),
   };
 };
