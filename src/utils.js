@@ -50,3 +50,7 @@ export const getRandomPeriod = (from, to) => {
     dateEnd,
   };
 };
+
+export const sumByKey = (array, key) => {
+  return array.reduce((acc, cur) => (acc += cur[key]), 0);
+};

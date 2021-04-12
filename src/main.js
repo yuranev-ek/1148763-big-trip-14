@@ -32,7 +32,7 @@ const siteHeaderElement = document.querySelector('.trip-main');
 render(siteHeaderElement, createRouteInformationTemplate(), 'afterbegin');
 
 const siteInfoElement = siteHeaderElement.querySelector('.trip-main__trip-info');
-render(siteInfoElement, createTotalCostTemplate());
+render(siteInfoElement, createTotalCostTemplate(events));
 
 const siteMenuElement = siteHeaderElement.querySelector('.trip-controls__navigation');
 render(siteMenuElement, createMenuTemplate());
