@@ -29,7 +29,7 @@ const events = new Array(EVENT_COUNT)
   });
 
 const siteHeaderElement = document.querySelector('.trip-main');
-render(siteHeaderElement, createRouteInformationTemplate(), 'afterbegin');
+render(siteHeaderElement, createRouteInformationTemplate(events), 'afterbegin');
 
 const siteInfoElement = siteHeaderElement.querySelector('.trip-main__trip-info');
 render(siteInfoElement, createTotalCostTemplate(events));
