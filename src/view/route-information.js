@@ -1,3 +1,6 @@
+import { DATE_FORMAT } from '../const.js';
+import { formatDate } from '../utils.js';
+
 const createTripTitleTemplate = (events) => {
   let prevDestinationName = null;
   return events
@@ -13,11 +16,13 @@ const createTripTitleTemplate = (events) => {
 
 export const createRouteInformationTemplate = (events) => {
   const tripTitleTemplate = createTripTitleTemplate(events);
+  const startTripDay = formatDate(events[0].dateStart, DATE_FORMAT.DAY);
+  const endTripDay = formatDate(events[events.length - 1].dateEnd, DATE_FORMAT.DAY);
   return `
     <section class="trip-main__trip-info  trip-info">
         <div class="trip-info__main">
             <h1 class="trip-info__title">${tripTitleTemplate}</h1>
-            <p class="trip-info__dates">Mar 18&nbsp;&mdash;&nbsp;20</p>
+            <p class="trip-info__dates">${startTripDay}&nbsp;&mdash;&nbsp;${endTripDay}</p>
         </div>
     </section>
     `;
