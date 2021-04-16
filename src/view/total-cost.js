@@ -1,11 +1,7 @@
 import { sumByKey } from '../utils.js';
 
 export const createTotalCostTemplate = (events) => {
-  let totalCost = 0;
-  events.forEach((event) => {
-    totalCost += event.basePrice;
-    totalCost += sumByKey(event.offers.list, 'price');
-  });
+  const totalCost = events.reduce((acc, event) => acc + event.basePrice + sumByKey(event.offers.list, 'price'), 0);
 
   return `
     <p class="trip-info__cost">
