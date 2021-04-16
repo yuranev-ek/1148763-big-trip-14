@@ -9,7 +9,7 @@ const createTripTitleTemplate = (events) => {
       const dash = index !== events.length - 1 ? '&mdash;' : '';
       const isSame = curDestinationName === prevDestinationName;
       prevDestinationName = curDestinationName;
-      return isSame ? acc : (acc += `${curDestinationName} ${dash} `);
+      return isSame ? acc : `${acc}${curDestinationName} ${dash} `;
     }, '')
     .trim();
 };
