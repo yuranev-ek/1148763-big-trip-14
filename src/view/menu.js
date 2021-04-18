@@ -1,3 +1,5 @@
+import AbstractView from './abstract-view.js';
+
 export const createMenuTemplate = () => {
   return `
     <div class="trip-controls__navigation">
@@ -9,3 +11,9 @@ export const createMenuTemplate = () => {
     </div>
     `;
 };
+
+export default class Menu extends AbstractView {
+  getTemplate() {
+    return createMenuTemplate();
+  }
+}
