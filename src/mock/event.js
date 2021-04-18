@@ -1,4 +1,5 @@
-import { getRandomInteger, getRandomBoolean, subtractDays, addDays, getRandomPeriod } from '../utils.js';
+import { subtractDays, addDays, getRandomPeriod } from '../utils/date.js';
+import { getRandomInteger, getRandomBoolean } from '../utils/common.js';
 import { generateOffers, OFFERS } from './offer.js';
 
 const LOREM =

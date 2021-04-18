@@ -1,4 +1,4 @@
-import { formatDate, getDiffOfDates } from '../utils.js';
+import { formatDate, getDiffOfDates } from '../utils/date.js';
 import { DATE_FORMAT } from '../const.js';
 
 const diffConvertedTimeOfEvent = (dateEnd, dateStart) => {

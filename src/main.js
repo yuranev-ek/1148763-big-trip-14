@@ -12,7 +12,7 @@ import { createEventTemplate } from './view/event.js';
 import { generateEvent } from './mock/event.js';
 
 // utils
-import { isAfter } from './utils.js';
+import { isAfter } from './utils/date.js';
 
 const render = (container, template, place = 'beforeend') => {
   if (container) {

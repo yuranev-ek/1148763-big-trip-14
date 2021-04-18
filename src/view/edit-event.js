@@ -1,5 +1,5 @@
 import { ROUTES, CITIES } from '../mock/event.js';
-import { formatDate } from '../utils.js';
+import { formatDate } from '../utils/date.js';
 import { DATE_FORMAT } from '../const.js';
 import { OFFERS } from '../mock/offer.js';
 

@@ -1,5 +1,5 @@
 import { DATE_FORMAT } from '../const.js';
-import { formatDate } from '../utils.js';
+import { formatDate } from '../utils/date.js';
 
 const createTripTitleTemplate = (events) => {
   let prevDestinationName = null;
