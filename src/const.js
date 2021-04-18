@@ -5,3 +5,8 @@ export const DATE_FORMAT = {
   TIME: 'HH:mm',
   DAY: 'MMM D',
 };
+
+export const RENDER_POSITION = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
