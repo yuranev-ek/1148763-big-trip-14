@@ -1,12 +1,12 @@
 // templates
 import { createRouteInformationTemplate } from './view/route-information.js';
-import { createFiltersTemplate } from './view/filters.js';
 import { createSortTemplate } from './view/sort.js';
 import { createListOfEventsTemplate } from './view/list-of-events.js';
 import { createEditEventTemplate } from './view/edit-event.js';
 import { createEventTemplate } from './view/event.js';
 import TotalCostView from './view/total-cost.js';
 import MenuView from './view/menu.js';
+import FiltersView from './view/filters.js';
 
 // mocks
 import { generateEvent } from './mock/event.js';
@@ -36,7 +36,7 @@ const siteMenuElement = siteHeaderElement.querySelector('.trip-controls__navigat
 renderElement(siteMenuElement, new MenuView().getElement(), RENDER_POSITION.BEFOREEND);
 
 const siteFiltersElement = siteHeaderElement.querySelector('.trip-controls__filters');
-renderTemplate(siteFiltersElement, createFiltersTemplate());
+renderElement(siteFiltersElement, new FiltersView().getElement(), RENDER_POSITION.BEFOREEND);
 
 const siteEventsElement = document.querySelector('.trip-events');
 renderTemplate(siteEventsElement, createSortTemplate());
