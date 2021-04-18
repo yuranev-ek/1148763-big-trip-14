@@ -1,3 +1,4 @@
+import AbstractView from './abstract-view.js';
 import { ROUTES, CITIES } from '../mock/event.js';
 import { formatDate } from '../utils/date.js';
 import { DATE_FORMAT } from '../const.js';
@@ -42,7 +43,7 @@ const createOffersTemplate = (checkedOffers, offers) => {
     .join('');
 };
 
-export const createEditEventTemplate = (event) => {
+const createEditEventTemplate = (event) => {
   const { route, destination, basePrice, dateStart, dateEnd, offers } = event;
 
   const srcToEventIcon = `img/icons/${route}.png`;
@@ -121,3 +122,13 @@ export const createEditEventTemplate = (event) => {
     </li>
     `;
 };
+
+export default class EditEvent extends AbstractView {
+  constructor(event) {
+    super();
+    this._event = event;
+  }
+  getTemplate() {
+    return createEditEventTemplate(this._event);
+  }
+}
