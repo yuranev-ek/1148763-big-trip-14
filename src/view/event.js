@@ -1,3 +1,4 @@
+import AbstractView from './abstract-view.js';
 import { formatDate, getDiffOfDates } from '../utils/date.js';
 import { DATE_FORMAT } from '../const.js';
 
@@ -38,7 +39,7 @@ const createOffersTemplate = (offers) => {
     .join('');
 };
 
-export const createEventTemplate = (event) => {
+const createEventTemplate = (event) => {
   const { route, destination, isFavorite, basePrice, dateStart, dateEnd, offers } = event;
 
   const srcToEventIcon = `img/icons/${route}.png`;
@@ -88,3 +89,13 @@ export const createEventTemplate = (event) => {
     </div>
     `;
 };
+
+export default class Event extends AbstractView {
+  constructor(event) {
+    super();
+    this._event = event;
+  }
+  getTemplate() {
+    return createEventTemplate(this._event);
+  }
+}

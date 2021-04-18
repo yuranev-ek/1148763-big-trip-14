@@ -1,12 +1,12 @@
 // templates
 import { createEditEventTemplate } from './view/edit-event.js';
-import { createEventTemplate } from './view/event.js';
 import TotalCostView from './view/total-cost.js';
 import MenuView from './view/menu.js';
 import FiltersView from './view/filters.js';
 import SortView from './view/sort.js';
 import RouteInformationView from './view/route-information.js';
 import ListOfEventsView from './view/list-of-events.js';
+import EventView from './view/event.js';
 
 // mocks
 import { generateEvent } from './mock/event.js';
@@ -45,4 +45,6 @@ renderElement(siteEventsElement, new ListOfEventsView().getElement(), RENDER_POS
 const siteListOfEventsTemplate = siteEventsElement.querySelector('.trip-events__list');
 renderTemplate(siteListOfEventsTemplate, createEditEventTemplate(events[0]));
 
-events.slice(1, events.length).forEach((event) => renderTemplate(siteListOfEventsTemplate, createEventTemplate(event)));
+events.slice(1, events.length).forEach((event) => {
+  renderElement(siteListOfEventsTemplate, new EventView(event).getElement(), RENDER_POSITION.BEFOREEND);
+});
