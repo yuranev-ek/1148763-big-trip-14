@@ -1,3 +1,4 @@
+import AbstractView from './abstract-view.js';
 import { DATE_FORMAT } from '../const.js';
 import { formatDate } from '../utils/date.js';
 
@@ -14,7 +15,7 @@ const createTripTitleTemplate = (events) => {
     .trim();
 };
 
-export const createRouteInformationTemplate = (events) => {
+const createRouteInformationTemplate = (events = []) => {
   const tripTitleTemplate = createTripTitleTemplate(events);
   const startTripDay = formatDate(events[0].dateStart, DATE_FORMAT.DAY);
   const endTripDay = formatDate(events[events.length - 1].dateEnd, DATE_FORMAT.DAY);
@@ -27,3 +28,13 @@ export const createRouteInformationTemplate = (events) => {
     </section>
     `;
 };
+
+export default class RouteInformation extends AbstractView {
+  constructor(events) {
+    super();
+    this._events = events;
+  }
+  getTemplate() {
+    return createRouteInformationTemplate(this._events);
+  }
+}
