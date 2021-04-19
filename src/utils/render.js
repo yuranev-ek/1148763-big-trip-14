@@ -17,3 +17,8 @@ export const createElement = (template) => {
 
   return newElement.firstElementChild;
 };
+
+export const replace = (newChild, oldChild) => {
+  const parent = oldChild.parentElement;
+  parent.replaceChild(newChild, oldChild);
+};
