@@ -12,3 +12,12 @@ export const RENDER_POSITION = {
 };
 
 export const EVENT_COUNT = 15;
+
+export const APP_ELEMENT_CLASSES = {
+  HEADER: '.trip-main',
+  INFO: '.trip-main__trip-info',
+  MENU: '.trip-controls__navigation',
+  FILTERS: '.trip-controls__filters',
+  EVENTS: '.trip-events',
+  LIST_OF_EVENTS: '.trip-events__list',
+};
