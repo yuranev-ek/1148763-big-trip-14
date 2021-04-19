@@ -16,10 +16,12 @@ const createTripTitleTemplate = (events) => {
 };
 
 const createRouteInformationTemplate = (events = []) => {
-  const tripTitleTemplate = createTripTitleTemplate(events);
-  const startTripDay = formatDate(events[0].dateStart, DATE_FORMAT.DAY);
-  const endTripDay = formatDate(events[events.length - 1].dateEnd, DATE_FORMAT.DAY);
-  return `
+  if (events.length) {
+    const tripTitleTemplate = createTripTitleTemplate(events);
+    const startTripDay = formatDate(events[0].dateStart, DATE_FORMAT.DAY);
+    const endTripDay = formatDate(events[events.length - 1].dateEnd, DATE_FORMAT.DAY);
+
+    return `
     <section class="trip-main__trip-info  trip-info">
         <div class="trip-info__main">
             <h1 class="trip-info__title">${tripTitleTemplate}</h1>
@@ -27,6 +29,13 @@ const createRouteInformationTemplate = (events = []) => {
         </div>
     </section>
     `;
+  } else {
+    return `
+    <section class="trip-main__trip-info  trip-info">
+        <div class="trip-info__main"></div>
+    </section>
+    `;
+  }
 };
 
 export default class RouteInformation extends AbstractView {
