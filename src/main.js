@@ -16,9 +16,8 @@ import { isAfter } from './utils/date.js';
 import { renderElement } from './utils/render.js';
 
 // const
-import { RENDER_POSITION } from './const.js';
+import { RENDER_POSITION, EVENT_COUNT } from './const.js';
 
-const EVENT_COUNT = 15;
 const events = new Array(EVENT_COUNT)
   .fill()
   .map(generateEvent)
@@ -43,7 +42,6 @@ renderElement(siteEventsElement, new SortView().getElement(), RENDER_POSITION.BE
 renderElement(siteEventsElement, new ListOfEventsView().getElement(), RENDER_POSITION.BEFOREEND);
 
 const siteListOfEventsTemplate = siteEventsElement.querySelector('.trip-events__list');
-renderElement(siteListOfEventsTemplate, new EditEventView(events[0]).getElement(), RENDER_POSITION.BEFOREEND);
 
 events.slice(1, events.length).forEach((event) => {
   renderElement(siteListOfEventsTemplate, new EventView(event).getElement(), RENDER_POSITION.BEFOREEND);

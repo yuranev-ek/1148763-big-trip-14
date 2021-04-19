@@ -10,3 +10,5 @@ export const RENDER_POSITION = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
 };
+
+export const EVENT_COUNT = 15;
