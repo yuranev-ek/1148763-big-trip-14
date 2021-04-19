@@ -13,7 +13,7 @@ import { generateEvent } from './mock/event.js';
 
 // utils
 import { isAfter } from './utils/date.js';
-import { renderElement } from './utils/render.js';
+import { renderElement, replace } from './utils/render.js';
 
 // const
 import { RENDER_POSITION, EVENT_COUNT, APP_ELEMENT_CLASSES } from './const.js';
@@ -44,6 +44,43 @@ renderElement(siteEventsElement, new ListOfEventsView().getElement(), RENDER_POS
 
 const siteListOfEventsTemplate = siteEventsElement.querySelector(APP_ELEMENT_CLASSES.LIST_OF_EVENTS);
 
-events.slice(1, events.length).forEach((event) => {
-  renderElement(siteListOfEventsTemplate, new EventView(event).getElement(), RENDER_POSITION.BEFOREEND);
-});
+const renderEvent = (event) => {
+  const eventElement = new EventView(event);
+  const editEventElement = new EditEventView(event);
+
+  const replaceEventToEditEvent = () => {
+    replace(editEventElement.getElement(), eventElement.getElement());
+  };
+
+  const replaceEditEventToEvent = () => {
+    replace(eventElement.getElement(), editEventElement.getElement());
+  };
+
+  const onEscKeyDown = (evt) => {
+    if (evt.key === 'Escape' || evt.key === 'Esc') {
+      evt.preventDefault();
+      replaceEditEventToEvent();
+      document.removeEventListener('keydown', onEscKeyDown);
+    }
+  };
+
+  const onClose = () => {
+    replaceEditEventToEvent();
+    document.removeEventListener('keydown', onEscKeyDown);
+  };
+
+  const onOpen = () => {
+    replaceEventToEditEvent();
+    document.addEventListener('keydown', onEscKeyDown);
+  };
+
+  eventElement.setEditClickHandler(() => onOpen());
+
+  editEventElement.setFormSubmitHandler(() => onClose());
+
+  editEventElement.setCloseClickHandler(() => onClose());
+
+  renderElement(siteListOfEventsTemplate, eventElement.getElement(), RENDER_POSITION.BEFOREEND);
+};
+
+events.forEach((event) => renderEvent(event));
