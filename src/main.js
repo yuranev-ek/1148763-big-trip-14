@@ -7,6 +7,7 @@ import RouteInformationView from './view/route-information.js';
 import ListOfEventsView from './view/list-of-events.js';
 import EventView from './view/event.js';
 import EditEventView from './view/edit-event.js';
+import NoEventView from './view/no-events.js';
 
 // mocks
 import { generateEvent } from './mock/event.js';
@@ -83,4 +84,8 @@ const renderEvent = (event) => {
   renderElement(siteListOfEventsTemplate, eventElement.getElement(), RENDER_POSITION.BEFOREEND);
 };
 
-events.forEach((event) => renderEvent(event));
+if (events.length) {
+  events.forEach((event) => renderEvent(event));
+} else {
+  renderElement(siteEventsElement, new NoEventView().getElement(), RENDER_POSITION.BEFOREEND);
+}
