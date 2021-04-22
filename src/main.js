@@ -1,5 +1,3 @@
-// this isn't a useful line in my life... skip block 3.1, since I completed 3-4 blocks in 4
-
 // templates
 import { createRouteInformationTemplate } from './view/route-information.js';
 import { createTotalCostTemplate } from './view/total-cost.js';
