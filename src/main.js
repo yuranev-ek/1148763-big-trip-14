@@ -1,3 +1,4 @@
+// templates
 import { createRouteInformationTemplate } from './view/route-information.js';
 import { createTotalCostTemplate } from './view/total-cost.js';
 import { createMenuTemplate } from './view/menu.js';
@@ -6,7 +7,12 @@ import { createSortTemplate } from './view/sort.js';
 import { createListOfEventsTemplate } from './view/list-of-events.js';
 import { createEditEventTemplate } from './view/edit-event.js';
 import { createEventTemplate } from './view/event.js';
-import { createNewEventTemplate } from './view/new-event.js';
+
+// mocks
+import { generateEvent } from './mock/event.js';
+
+// utils
+import { isAfter } from './utils.js';
 
 const render = (container, template, place = 'beforeend') => {
   if (container) {
@@ -14,11 +20,19 @@ const render = (container, template, place = 'beforeend') => {
   }
 };
 
+const EVENT_COUNT = 15;
+const events = new Array(EVENT_COUNT)
+  .fill()
+  .map(generateEvent)
+  .sort((a, b) => {
+    return isAfter(a.dateStart, b.dateStart) ? 1 : -1;
+  });
+
 const siteHeaderElement = document.querySelector('.trip-main');
-render(siteHeaderElement, createRouteInformationTemplate(), 'afterbegin');
+render(siteHeaderElement, createRouteInformationTemplate(events), 'afterbegin');
 
 const siteInfoElement = siteHeaderElement.querySelector('.trip-main__trip-info');
-render(siteInfoElement, createTotalCostTemplate());
+render(siteInfoElement, createTotalCostTemplate(events));
 
 const siteMenuElement = siteHeaderElement.querySelector('.trip-controls__navigation');
 render(siteMenuElement, createMenuTemplate());
@@ -31,11 +45,6 @@ render(siteEventsElement, createSortTemplate());
 render(siteEventsElement, createListOfEventsTemplate());
 
 const siteListOfEventsTemplate = siteEventsElement.querySelector('.trip-events__list');
-render(siteListOfEventsTemplate, createEditEventTemplate());
+render(siteListOfEventsTemplate, createEditEventTemplate(events[0]));
 
-const EVENT_COUNT = 3;
-for (let i = 0; i < EVENT_COUNT; i++) {
-  render(siteListOfEventsTemplate, createEventTemplate());
-}
-
-render(siteListOfEventsTemplate, createNewEventTemplate());
+events.slice(1, events.length).forEach((event) => render(siteListOfEventsTemplate, createEventTemplate(event)));
