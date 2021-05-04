@@ -1,4 +1,5 @@
-import { renderElement, replace } from '../utils/render';
+import PointPresenter from './point';
+import { renderElement } from '../utils/render';
 import { RENDER_POSITION } from '../const';
 
 export default class Trip {
@@ -14,6 +15,7 @@ export default class Trip {
     this._tripContainer = container;
     this._sourcedPoints = points.slice();
     this._points = points.slice();
+    this._pointPresenter = {};
 
     this._sortComponent = sortComponent;
     this._pointsListComponent = pointsListComponent;
@@ -50,41 +52,11 @@ export default class Trip {
   }
 
   _renderPoint(point) {
+    const pointsList = this._pointsListComponent.getElement();
     const pointElement = new this._pointComponent(point);
     const editPointElement = new this._editPointComponent(point);
 
-    const replacePointToEditPoint = () => {
-      replace(editPointElement.getElement(), pointElement.getElement());
-    };
-
-    const replaceEditPointToPoint = () => {
-      replace(pointElement.getElement(), editPointElement.getElement());
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (evt.key === 'Escape' || evt.key === 'Esc') {
-        evt.preventDefault();
-        replaceEditPointToPoint();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    const onClose = () => {
-      replaceEditPointToPoint();
-      document.removeEventListener('keydown', onEscKeyDown);
-    };
-
-    const onOpen = () => {
-      replacePointToEditPoint();
-      document.addEventListener('keydown', onEscKeyDown);
-    };
-
-    pointElement.setEditClickHandler(() => onOpen());
-
-    editPointElement.setFormSubmitHandler(() => onClose());
-
-    editPointElement.setCloseClickHandler(() => onClose());
-
-    renderElement(this._pointsListComponent.getElement(), pointElement.getElement(), RENDER_POSITION.BEFOREEND);
+    const pointPresenter = new PointPresenter(pointsList, point, pointElement, editPointElement);
+    pointPresenter.init();
   }
 }
