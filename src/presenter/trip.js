@@ -25,6 +25,7 @@ export default class Trip {
     this._editPointComponent = editPointComponent;
 
     this._handlePointChange = this._handlePointChange.bind(this);
+    this._handleModeChange = this._handleModeChange.bind(this);
   }
 
   init() {
@@ -58,6 +59,7 @@ export default class Trip {
     const pointPresenter = new PointPresenter({
       container: this._pointsListComponent.getElement(),
       changeData: this._handlePointChange,
+      changeMode: this._handleModeChange,
     });
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
@@ -68,5 +70,9 @@ export default class Trip {
     this._sourcedBoardTasks = updateItem(this._points, updatedPoint);
     this._pointPresenter[updatedPoint.id].destroy();
     this._pointPresenter[updatedPoint.id].init(updatedPoint);
+  }
+
+  _handleModeChange() {
+    Object.values(this._pointPresenter).forEach((point) => point.resetView());
   }
 }
