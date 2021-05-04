@@ -1,6 +1,7 @@
 import PointPresenter from './point';
 import { renderElement } from '../utils/render';
 import { RENDER_POSITION } from '../const';
+import { updateItem } from '../utils/common.js';
 
 export default class Trip {
   constructor({
@@ -22,6 +23,8 @@ export default class Trip {
     this._noPointsComponent = noPointsComponent;
     this._pointComponent = pointComponent;
     this._editPointComponent = editPointComponent;
+
+    this._handlePointChange = this._handlePointChange.bind(this);
   }
 
   init() {
@@ -52,11 +55,18 @@ export default class Trip {
   }
 
   _renderPoint(point) {
-    const pointsList = this._pointsListComponent.getElement();
-    const pointElement = new this._pointComponent(point);
-    const editPointElement = new this._editPointComponent(point);
+    const pointPresenter = new PointPresenter({
+      container: this._pointsListComponent.getElement(),
+      changeData: this._handlePointChange,
+    });
+    pointPresenter.init(point);
+    this._pointPresenter[point.id] = pointPresenter;
+  }
 
-    const pointPresenter = new PointPresenter(pointsList, point, pointElement, editPointElement);
-    pointPresenter.init();
+  _handlePointChange(updatedPoint) {
+    this._sourcedPoints = updateItem(this._sourcedPoints, updatedPoint);
+    this._sourcedBoardTasks = updateItem(this._points, updatedPoint);
+    this._pointPresenter[updatedPoint.id].destroy();
+    this._pointPresenter[updatedPoint.id].init(updatedPoint);
   }
 }

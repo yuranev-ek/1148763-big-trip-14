@@ -1,38 +1,63 @@
-import { renderElement, replace } from '../utils/render';
+import PointView from '../view/point.js';
+import EditPointView from '../view/edit-point.js';
+import { renderElement, replace, remove } from '../utils/render';
 import { RENDER_POSITION } from '../const.js';
 
 export default class Point {
-  constructor(tripContainer, point, pointComponent, editPointComponent) {
-    this._tripContainer = tripContainer;
-    this._point = point;
+  constructor({ container, changeData }) {
+    this._container = container;
+    this._point = null;
 
-    this._pointComponent = pointComponent;
-    this._editPointComponent = editPointComponent;
+    this._changeData = changeData;
+
+    this._pointComponent = null;
+    this._editPointComponent = null;
 
     this._handleEditClick = this._handleEditClick.bind(this);
+    this._handleFavoriteClick = this._handleFavoriteClick.bind(this);
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleCloseClick = this._handleCloseClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
   }
 
-  init() {
+  init(point) {
+    this._point = point;
+
+    this._pointComponent = new PointView(point);
+    this._editPointComponent = new EditPointView(point);
+
     this._pointComponent.setEditClickHandler(this._handleEditClick);
+    this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._editPointComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._editPointComponent.setCloseClickHandler(this._handleCloseClick);
 
-    renderElement(this._tripContainer, this._pointComponent.getElement(), RENDER_POSITION.BEFOREEND);
+    renderElement(this._container, this._pointComponent.getElement(), RENDER_POSITION.BEFOREEND);
+  }
+
+  destroy() {
+    remove(this._pointComponent);
+    remove(this._editPointComponent);
   }
 
   _handleEditClick() {
     this._replacePointToEditPoint();
   }
 
-  _handleFormSubmit() {
+  _handleFormSubmit(point) {
+    this._changeData(point);
     this._replaceEditPointToPoint();
   }
 
   _handleCloseClick() {
     this._replaceEditPointToPoint();
+  }
+
+  _handleFavoriteClick() {
+    this._changeData(
+      Object.assign({}, this._point, {
+        isFavorite: !this._point.isFavorite,
+      })
+    );
   }
 
   _escKeyDownHandler(evt) {
