@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view.js';
-import { ROUTES, CITIES } from '../mock/event.js';
+import { ROUTES, CITIES } from '../mock/point.js';
 import { formatDate } from '../utils/date.js';
 import { DATE_FORMAT } from '../const.js';
 import { OFFERS } from '../mock/offer.js';
@@ -43,10 +43,10 @@ const createOffersTemplate = (checkedOffers, offers) => {
     .join('');
 };
 
-const createEditEventTemplate = (event) => {
-  const { route, destination, basePrice, dateStart, dateEnd, offers } = event;
+const createEditPointTemplate = (point) => {
+  const { route, destination, basePrice, dateStart, dateEnd, offers } = point;
 
-  const srcToEventIcon = `img/icons/${route}.png`;
+  const srcToPointIcon = `img/icons/${route}.png`;
   const typeListOfRoutesTemplate = createTypeListOfRoutesTemplate(ROUTES);
   const optionsOfCitiesTemplate = createOptionsOfCities(CITIES);
   const formattedDateStart = formatDate(dateStart, DATE_FORMAT.DATE_TIME);
@@ -60,7 +60,7 @@ const createEditEventTemplate = (event) => {
             <div class="event__type-wrapper">
                 <label class="event__type  event__type-btn" for="event-type-toggle-1">
                     <span class="visually-hidden">Choose event type</span>
-                    <img class="event__type-icon" width="17" height="17" src="${srcToEventIcon}" alt="${route}">
+                    <img class="event__type-icon" width="17" height="17" src="${srcToPointIcon}" alt="${route}">
                 </label>
                 <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
 
@@ -123,17 +123,17 @@ const createEditEventTemplate = (event) => {
     `;
 };
 
-export default class EditEvent extends AbstractView {
-  constructor(event) {
+export default class EditPoint extends AbstractView {
+  constructor(point) {
     super();
-    this._event = event;
+    this._point = point;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._closeClickHandler = this._closeClickHandler.bind(this);
   }
 
   getTemplate() {
-    return createEditEventTemplate(this._event);
+    return createEditPointTemplate(this._point);
   }
 
   _formSubmitHandler(evt) {
@@ -143,7 +143,7 @@ export default class EditEvent extends AbstractView {
 
   _closeClickHandler(evt) {
     evt.preventDefault();
-    this._handlers.closeEditEventClick();
+    this._handlers.closeEditPointClick();
   }
 
   setFormSubmitHandler(callback) {
@@ -152,7 +152,7 @@ export default class EditEvent extends AbstractView {
   }
 
   setCloseClickHandler(callback) {
-    this._handlers.closeEditEventClick = callback;
+    this._handlers.closeEditPointClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._closeClickHandler);
   }
 }

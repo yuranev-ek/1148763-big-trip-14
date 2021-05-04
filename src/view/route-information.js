@@ -2,12 +2,12 @@ import AbstractView from './abstract-view.js';
 import { DATE_FORMAT } from '../const.js';
 import { formatDate } from '../utils/date.js';
 
-const createTripTitleTemplate = (events) => {
+const createTripTitleTemplate = (points) => {
   let prevDestinationName = null;
-  return events
+  return points
     .reduce((acc, cur, index) => {
       const curDestinationName = cur.destination.name;
-      const dash = index !== events.length - 1 ? '&mdash;' : '';
+      const dash = index !== points.length - 1 ? '&mdash;' : '';
       const isSame = curDestinationName === prevDestinationName;
       prevDestinationName = curDestinationName;
       return isSame ? acc : `${acc}${curDestinationName} ${dash} `;
@@ -15,11 +15,11 @@ const createTripTitleTemplate = (events) => {
     .trim();
 };
 
-const createRouteInformationTemplate = (events = []) => {
-  if (events.length) {
-    const tripTitleTemplate = createTripTitleTemplate(events);
-    const startTripDay = formatDate(events[0].dateStart, DATE_FORMAT.DAY);
-    const endTripDay = formatDate(events[events.length - 1].dateEnd, DATE_FORMAT.DAY);
+const createRouteInformationTemplate = (points = []) => {
+  if (points.length) {
+    const tripTitleTemplate = createTripTitleTemplate(points);
+    const startTripDay = formatDate(points[0].dateStart, DATE_FORMAT.DAY);
+    const endTripDay = formatDate(points[points.length - 1].dateEnd, DATE_FORMAT.DAY);
 
     return `
     <section class="trip-main__trip-info  trip-info">
@@ -39,11 +39,11 @@ const createRouteInformationTemplate = (events = []) => {
 };
 
 export default class RouteInformation extends AbstractView {
-  constructor(events) {
+  constructor(points) {
     super();
-    this._events = events;
+    this._points = points;
   }
   getTemplate() {
-    return createRouteInformationTemplate(this._events);
+    return createRouteInformationTemplate(this._points);
   }
 }

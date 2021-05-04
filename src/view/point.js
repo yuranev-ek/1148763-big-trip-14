@@ -2,25 +2,25 @@ import AbstractView from './abstract-view.js';
 import { formatDate, getDiffOfDates } from '../utils/date.js';
 import { DATE_FORMAT } from '../const.js';
 
-const diffConvertedTimeOfEvent = (dateEnd, dateStart) => {
-  const diffMinutesOfEvent = getDiffOfDates(dateEnd, dateStart, 'minute') % 60;
-  const diffHoursOfEvent = getDiffOfDates(dateEnd, dateStart, 'hour') % 24;
-  const diffDaysOfEvent = getDiffOfDates(dateEnd, dateStart);
+const diffConvertedTimeOfPoint = (dateEnd, dateStart) => {
+  const diffMinutesOfPoint = getDiffOfDates(dateEnd, dateStart, 'minute') % 60;
+  const diffHoursOfPoint = getDiffOfDates(dateEnd, dateStart, 'hour') % 24;
+  const diffDaysOfPoint = getDiffOfDates(dateEnd, dateStart);
   let convertedTime = '';
 
   const addZero = (num) => {
     return `${num}`.length === 1 ? `0${num}` : num;
   };
 
-  if (diffDaysOfEvent) {
-    convertedTime += `${addZero(diffDaysOfEvent)}D`;
+  if (diffDaysOfPoint) {
+    convertedTime += `${addZero(diffDaysOfPoint)}D`;
   }
 
-  if (diffHoursOfEvent || diffDaysOfEvent) {
-    convertedTime += ` ${addZero(diffHoursOfEvent)}H`;
+  if (diffHoursOfPoint || diffDaysOfPoint) {
+    convertedTime += ` ${addZero(diffHoursOfPoint)}H`;
   }
 
-  convertedTime += ` ${addZero(diffMinutesOfEvent)}M`;
+  convertedTime += ` ${addZero(diffMinutesOfPoint)}M`;
 
   return convertedTime.trim();
 };
@@ -39,34 +39,34 @@ const createOffersTemplate = (offers) => {
     .join('');
 };
 
-const createEventTemplate = (event) => {
-  const { route, destination, isFavorite, basePrice, dateStart, dateEnd, offers } = event;
+const createPointTemplate = (point) => {
+  const { route, destination, isFavorite, basePrice, dateStart, dateEnd, offers } = point;
 
-  const srcToEventIcon = `img/icons/${route}.png`;
+  const srcToPointIcon = `img/icons/${route}.png`;
   const classByIsFavorite = isFavorite ? 'event__favorite-btn--active' : '';
 
   const attrDateOfDateStart = formatDate(dateStart, DATE_FORMAT.ATTR_DATE);
   const attrDateTimeOfDateStart = formatDate(dateStart, DATE_FORMAT.ATTR_DATE_TIME);
   const attrDateTimeOfDateEnd = formatDate(dateEnd, DATE_FORMAT.ATTR_DATE_TIME);
-  const startEventTime = formatDate(dateStart, DATE_FORMAT.TIME);
-  const endEventTime = formatDate(dateEnd, DATE_FORMAT.TIME);
-  const eventDay = formatDate(dateStart, DATE_FORMAT.DAY);
-  const diffTime = diffConvertedTimeOfEvent(dateEnd, dateStart);
+  const startPointTime = formatDate(dateStart, DATE_FORMAT.TIME);
+  const endPointTime = formatDate(dateEnd, DATE_FORMAT.TIME);
+  const PointDay = formatDate(dateStart, DATE_FORMAT.DAY);
+  const diffTime = diffConvertedTimeOfPoint(dateEnd, dateStart);
 
   const offersTemplate = createOffersTemplate(offers.list);
 
   return `
     <div class="event">
-        <time class="event__date" datetime="${attrDateOfDateStart}">${eventDay}</time>
+        <time class="event__date" datetime="${attrDateOfDateStart}">${PointDay}</time>
         <div class="event__type">
-            <img class="event__type-icon" width="42" height="42" src="${srcToEventIcon}" alt="${route}">
+            <img class="event__type-icon" width="42" height="42" src="${srcToPointIcon}" alt="${route}">
         </div>
         <h3 class="event__title">${route} ${destination.name}</h3>
         <div class="event__schedule">
             <p class="event__time">
-            <time class="event__start-time" datetime="${attrDateTimeOfDateStart}">${startEventTime}</time>
+            <time class="event__start-time" datetime="${attrDateTimeOfDateStart}">${startPointTime}</time>
             &mdash;
-            <time class="event__end-time" datetime="${attrDateTimeOfDateEnd}">${endEventTime}</time>
+            <time class="event__end-time" datetime="${attrDateTimeOfDateEnd}">${endPointTime}</time>
             </p>
             <p class="event__duration">${diffTime}</p>
         </div>
@@ -90,16 +90,16 @@ const createEventTemplate = (event) => {
     `;
 };
 
-export default class Event extends AbstractView {
-  constructor(event) {
+export default class Point extends AbstractView {
+  constructor(point) {
     super();
-    this._event = event;
+    this._point = point;
 
     this._editClickHandler = this._editClickHandler.bind(this);
   }
 
   getTemplate() {
-    return createEventTemplate(this._event);
+    return createPointTemplate(this._point);
   }
 
   _editClickHandler(evt) {

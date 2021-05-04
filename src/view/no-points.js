@@ -1,13 +1,13 @@
 import AbstractView from './abstract-view.js';
 
-const createNoEventTemplate = () => {
+const createNoPointTemplate = () => {
   return `<p class="trip-events__msg">
   Click New Event to create your first point
   </p>`;
 };
 
-export default class NoEvents extends AbstractView {
+export default class NoPoints extends AbstractView {
   getTemplate() {
-    return createNoEventTemplate();
+    return createNoPointTemplate();
   }
 }

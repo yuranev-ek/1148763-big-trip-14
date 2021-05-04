@@ -123,7 +123,7 @@ const generateBasePrice = () => {
   return getRandomInteger(BASE_PRICE_META.MIN, BASE_PRICE_META.MAX);
 };
 
-export const generateEvent = () => {
+export const generatePoint = () => {
   const route = generateRoute();
   const minDateStart = subtractDays(DATE_META.DAYS_BEFORE);
   const maxDateEnd = addDays(DATE_META.DAYS_AFTER);
