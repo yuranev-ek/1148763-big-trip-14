@@ -21,3 +21,9 @@ export const APP_ELEMENT_CLASSES = {
   POINTS: '.trip-events',
   POINTS_LIST: '.trip-events__list',
 };
+
+export const SortType = {
+  DAY: 'day',
+  PRICE: 'price',
+  TIME: 'time',
+};

@@ -1,12 +1,12 @@
 import PointPresenter from './point';
 import { renderElement } from '../utils/render';
-import { RENDER_POSITION } from '../const';
+import { RENDER_POSITION, SortType } from '../const';
 import { updateItem } from '../utils/common.js';
+import { getDiffOfDates } from '../utils/date.js';
 
 export default class Trip {
   constructor({
     container,
-    points = [],
     sortComponent,
     pointsListComponent,
     noPointsComponent,
@@ -14,9 +14,10 @@ export default class Trip {
     editPointComponent,
   }) {
     this._tripContainer = container;
-    this._sourcedPoints = points.slice();
-    this._points = points.slice();
+    this._sourcedPoints = null;
+    this._points = null;
     this._pointPresenter = {};
+    this._currentSortType = SortType.DEFAULT;
 
     this._sortComponent = sortComponent;
     this._pointsListComponent = pointsListComponent;
@@ -26,19 +27,24 @@ export default class Trip {
 
     this._handlePointChange = this._handlePointChange.bind(this);
     this._handleModeChange = this._handleModeChange.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
-  init() {
-    this._renderTrip();
-  }
-
-  _renderTrip() {
+  init(points) {
+    this._points = points.slice();
+    this._sourcedPoints = points.slice();
     this._renderSort();
     this._renderPointsList();
   }
 
+  _clearTaskList() {
+    Object.values(this._pointPresenter).forEach((point) => point.destroy());
+    this._pointPresenter = {};
+  }
+
   _renderSort() {
     renderElement(this._tripContainer, this._sortComponent.getElement(), RENDER_POSITION.BEFOREEND);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
   _renderPointsList() {
@@ -74,5 +80,65 @@ export default class Trip {
 
   _handleModeChange() {
     Object.values(this._pointPresenter).forEach((point) => point.resetView());
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      this._points.reverse();
+    } else {
+      this._sortPoints(sortType);
+    }
+
+    this._clearTaskList();
+    this._renderPointsList();
+  }
+
+  _sortPoints(sortType) {
+    switch (sortType) {
+      case SortType.TIME:
+        this._points.sort((p1, p2) => {
+          const diffMinutesOfPoint1 = getDiffOfDates(p1.dateEnd, p1.dateStart, 'minute');
+          const diffMinutesOfPoint2 = getDiffOfDates(p2.dateEnd, p2.dateStart, 'minute');
+
+          if (diffMinutesOfPoint1 > diffMinutesOfPoint2) {
+            return 1;
+          }
+
+          if (diffMinutesOfPoint1 < diffMinutesOfPoint2) {
+            return -1;
+          }
+
+          if (diffMinutesOfPoint1 === diffMinutesOfPoint2) {
+            return 0;
+          }
+
+          return null;
+        });
+        break;
+      case SortType.PRICE:
+        this._points.sort((p1, p2) => {
+          const price1 = p1.basePrice;
+          const price2 = p2.basePrice;
+
+          if (price1 > price2) {
+            return 1;
+          }
+
+          if (price1 < price2) {
+            return -1;
+          }
+
+          if (price1 === price2) {
+            return 0;
+          }
+
+          return null;
+        });
+        break;
+      default:
+        this._points = this._sourcedPoints.slice();
+    }
+
+    this._currentSortType = sortType;
   }
 }

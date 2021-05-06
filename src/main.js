@@ -48,7 +48,6 @@ const tripPresenter = new TripPresenter({
   noPointsComponent: new NoPointsView(),
   pointComponent: PointView,
   editPointComponent: EditPointView,
-  points,
 });
 
-tripPresenter.init();
+tripPresenter.init(points);

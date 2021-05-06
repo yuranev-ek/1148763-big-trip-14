@@ -2,7 +2,7 @@ import AbstractView from './abstract-view.js';
 import { formatDate, getDiffOfDates } from '../utils/date.js';
 import { DATE_FORMAT } from '../const.js';
 
-const diffConvertedTimeOfPoint = (dateEnd, dateStart) => {
+export const diffConvertedTimeOfPoint = (dateEnd, dateStart) => {
   const diffMinutesOfPoint = getDiffOfDates(dateEnd, dateStart, 'minute') % 60;
   const diffHoursOfPoint = getDiffOfDates(dateEnd, dateStart, 'hour') % 24;
   const diffDaysOfPoint = getDiffOfDates(dateEnd, dateStart);
