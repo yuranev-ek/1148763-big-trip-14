@@ -17,10 +17,10 @@ import { generatePoint } from './mock/point.js';
 
 // utils
 import { isAfter } from './utils/date.js';
-import { renderElement } from './utils/render.js';
+import { renderElement, RENDER_POSITION } from './utils/render.js';
 
 // const
-import { RENDER_POSITION, POINT_COUNT, APP_ELEMENT_CLASSES } from './const.js';
+import { POINT_COUNT, APP_ELEMENT_CLASSES } from './const.js';
 
 // logic
 const points = new Array(POINT_COUNT)
@@ -31,13 +31,13 @@ const points = new Array(POINT_COUNT)
   });
 
 const siteHeaderElement = document.querySelector(APP_ELEMENT_CLASSES.HEADER);
-renderElement(siteHeaderElement, new RouteInformationView(points).getElement(), RENDER_POSITION.AFTERBEGIN);
+renderElement(siteHeaderElement, new RouteInformationView(points), RENDER_POSITION.AFTERBEGIN);
 const siteInfoElement = siteHeaderElement.querySelector(APP_ELEMENT_CLASSES.INFO);
-renderElement(siteInfoElement, new TotalCostView(points).getElement(), RENDER_POSITION.BEFOREEND);
+renderElement(siteInfoElement, new TotalCostView(points), RENDER_POSITION.BEFOREEND);
 const siteMenuElement = siteHeaderElement.querySelector(APP_ELEMENT_CLASSES.MENU);
-renderElement(siteMenuElement, new MenuView().getElement(), RENDER_POSITION.BEFOREEND);
+renderElement(siteMenuElement, new MenuView(), RENDER_POSITION.BEFOREEND);
 const siteFiltersElement = siteHeaderElement.querySelector(APP_ELEMENT_CLASSES.FILTERS);
-renderElement(siteFiltersElement, new FiltersView().getElement(), RENDER_POSITION.BEFOREEND);
+renderElement(siteFiltersElement, new FiltersView(), RENDER_POSITION.BEFOREEND);
 
 const sitePointsElement = document.querySelector(APP_ELEMENT_CLASSES.POINTS);
 

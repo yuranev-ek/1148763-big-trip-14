@@ -1,6 +1,5 @@
 import PointPresenter from './point';
-import { renderElement } from '../utils/render';
-import { RENDER_POSITION } from '../const';
+import { renderElement, RENDER_POSITION } from '../utils/render';
 import { updateItem } from '../utils/common.js';
 
 export default class Trip {
@@ -38,17 +37,17 @@ export default class Trip {
   }
 
   _renderSort() {
-    renderElement(this._tripContainer, this._sortComponent.getElement(), RENDER_POSITION.BEFOREEND);
+    renderElement(this._tripContainer, this._sortComponent, RENDER_POSITION.BEFOREEND);
   }
 
   _renderPointsList() {
-    renderElement(this._tripContainer, this._pointsListComponent.getElement(), RENDER_POSITION.BEFOREEND);
+    renderElement(this._tripContainer, this._pointsListComponent, RENDER_POSITION.BEFOREEND);
 
     this._points.length ? this._renderPoints() : this._renderNoPoints();
   }
 
   _renderNoPoints() {
-    renderElement(this._tripContainer, this._noPointsComponent.getElement(), RENDER_POSITION.BEFOREEND);
+    renderElement(this._tripContainer, this._noPointsComponent, RENDER_POSITION.BEFOREEND);
   }
 
   _renderPoints() {
@@ -57,7 +56,7 @@ export default class Trip {
 
   _renderPoint(point) {
     const pointPresenter = new PointPresenter({
-      container: this._pointsListComponent.getElement(),
+      container: this._pointsListComponent,
       changeData: this._handlePointChange,
       changeMode: this._handleModeChange,
     });
