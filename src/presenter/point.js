@@ -1,7 +1,6 @@
 import PointView from '../view/point.js';
 import EditPointView from '../view/edit-point.js';
-import { renderElement, replace, remove } from '../utils/render';
-import { RENDER_POSITION } from '../const.js';
+import { renderElement, replaceElement, remove, RENDER_POSITION } from '../utils/render';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
@@ -37,7 +36,7 @@ export default class Point {
     this._editPointComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._editPointComponent.setCloseClickHandler(this._handleCloseClick);
 
-    renderElement(this._container, this._pointComponent.getElement(), RENDER_POSITION.BEFOREEND);
+    renderElement(this._container, this._pointComponent, RENDER_POSITION.BEFOREEND);
   }
 
   destroy() {
@@ -77,14 +76,14 @@ export default class Point {
   }
 
   _replacePointToEditPoint() {
-    replace(this._editPointComponent.getElement(), this._pointComponent.getElement());
+    replaceElement(this._editPointComponent, this._pointComponent);
     document.addEventListener('keydown', this._escKeyDownHandler);
     this._changeMode();
     this._mode = Mode.EDITING;
   }
 
   _replaceEditPointToPoint() {
-    replace(this._pointComponent.getElement(), this._editPointComponent.getElement());
+    replaceElement(this._pointComponent, this._editPointComponent);
     document.removeEventListener('keydown', this._escKeyDownHandler);
     this._mode = Mode.DEFAULT;
   }
