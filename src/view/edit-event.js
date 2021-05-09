@@ -1,5 +1,6 @@
+import AbstractView from './abstract-view.js';
 import { ROUTES, CITIES } from '../mock/event.js';
-import { formatDate } from '../utils.js';
+import { formatDate } from '../utils/date.js';
 import { DATE_FORMAT } from '../const.js';
 import { OFFERS } from '../mock/offer.js';
 
@@ -42,7 +43,7 @@ const createOffersTemplate = (checkedOffers, offers) => {
     .join('');
 };
 
-export const createEditEventTemplate = (event) => {
+const createEditEventTemplate = (event) => {
   const { route, destination, basePrice, dateStart, dateEnd, offers } = event;
 
   const srcToEventIcon = `img/icons/${route}.png`;
@@ -121,3 +122,37 @@ export const createEditEventTemplate = (event) => {
     </li>
     `;
 };
+
+export default class EditEvent extends AbstractView {
+  constructor(event) {
+    super();
+    this._event = event;
+
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._closeClickHandler = this._closeClickHandler.bind(this);
+  }
+
+  getTemplate() {
+    return createEditEventTemplate(this._event);
+  }
+
+  _formSubmitHandler(evt) {
+    evt.preventDefault();
+    this._handlers.formSubmit();
+  }
+
+  _closeClickHandler(evt) {
+    evt.preventDefault();
+    this._handlers.closeEditEventClick();
+  }
+
+  setFormSubmitHandler(callback) {
+    this._handlers.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('submit', this._formSubmitHandler);
+  }
+
+  setCloseClickHandler(callback) {
+    this._handlers.closeEditEventClick = callback;
+    this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._closeClickHandler);
+  }
+}
