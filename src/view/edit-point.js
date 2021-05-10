@@ -1,5 +1,5 @@
 import SmartView from './smart-view.js';
-import { ROUTES, CITIES } from '../mock/point.js';
+import { ROUTES, CITIES, generateDestination } from '../mock/point.js';
 import { formatDate } from '../utils/date.js';
 import { DATE_FORMAT } from '../const.js';
 import { OFFERS } from '../mock/offer.js';
@@ -43,6 +43,19 @@ const createOffersTemplate = (checkedOffers, offers) => {
     .join('');
 };
 
+const createDestinationPhotosTemplate = (photos) => {
+  return photos
+    .map((photo) => {
+      return `
+      <img 
+        class="event__photo" 
+        src="${photo.src}" 
+        alt="${photo.description}"
+      >`;
+    })
+    .join('');
+};
+
 const createEditPointTemplate = (point) => {
   const { route, destination, basePrice, dateStart, dateEnd, offers } = point;
 
@@ -51,6 +64,7 @@ const createEditPointTemplate = (point) => {
   const optionsOfCitiesTemplate = createOptionsOfCities(CITIES);
   const formattedDateStart = formatDate(dateStart, DATE_FORMAT.DATE_TIME);
   const formattedDateEnd = formatDate(dateEnd, DATE_FORMAT.DATE_TIME);
+  const photosTemplate = createDestinationPhotosTemplate(point.destination.pictures);
   const offersTemplate = createOffersTemplate(offers.list, OFFERS[offers.type]);
 
   return `
@@ -116,6 +130,11 @@ const createEditPointTemplate = (point) => {
             <section class="event__section  event__section--destination">
                 <h3 class="event__section-title  event__section-title--destination">Destination</h3>
                 <p class="event__destination-description">${destination.description}</p>
+                <div class="event__photos-container">
+                  <div class="event__photos-tape">
+                    ${photosTemplate}
+                  </div>
+                </div>
             </section>
         </section>
         </form>
@@ -131,6 +150,7 @@ export default class EditPoint extends SmartView {
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._closeClickHandler = this._closeClickHandler.bind(this);
     this._changePointTypeHandler = this._changePointTypeHandler.bind(this);
+    this._changeDestinationHandler = this._changeDestinationHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -159,8 +179,23 @@ export default class EditPoint extends SmartView {
     });
   }
 
+  _changeDestinationHandler(evt) {
+    evt.preventDefault();
+    const newDestinationName = evt.target.value;
+    const isCityExist = CITIES.findIndex((city) => city === newDestinationName) !== -1;
+    if (isCityExist) {
+      const newDestination = Object.assign({}, generateDestination(), {
+        name: newDestinationName,
+      });
+      this.updateData({
+        destination: newDestination,
+      });
+    }
+  }
+
   _setInnerHandlers() {
     this.setChangePointEventHandler();
+    this.setChangeDestinationHandler();
   }
 
   setFormSubmitHandler(callback) {
@@ -180,8 +215,15 @@ export default class EditPoint extends SmartView {
     });
   }
 
+  setChangeDestinationHandler() {
+    this.getElement()
+      .querySelector('.event__input--destination')
+      .addEventListener('change', this._changeDestinationHandler);
+  }
+
   restoreHandlers() {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._handlers.formSubmit);
+    this.setCloseClickHandler(this._handlers.closeEditPointClick);
   }
 }

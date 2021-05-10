@@ -108,7 +108,7 @@ const generatePictures = (num) => {
   return pictures;
 };
 
-const generateDestination = () => {
+export const generateDestination = () => {
   const numbersOfSentences = getRandomInteger(NUMBERS_OF_SENTENCES.MIN, NUMBERS_OF_SENTENCES.MAX);
   const numberOfPictures = getRandomInteger(PICTURE_META.MIN, PICTURE_META.MAX);
 
