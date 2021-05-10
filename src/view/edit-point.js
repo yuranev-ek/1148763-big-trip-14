@@ -1,4 +1,4 @@
-import AbstractView from './abstract-view.js';
+import SmartView from './smart-view.js';
 import { ROUTES, CITIES } from '../mock/point.js';
 import { formatDate } from '../utils/date.js';
 import { DATE_FORMAT } from '../const.js';
@@ -9,7 +9,7 @@ const createTypeListOfRoutesTemplate = (routes) => {
     .map((route) => {
       return `
         <div class="event__type-item">
-            <input id="event-type-${route.name}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${route.name}">
+            <input id="event-type-${route.name}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${route.name}" data-point-type="${route.type}" data-route-name="${route.name}">
             <label class="event__type-label  event__type-label--${route.name}" for="event-type-${route.name}-1">${route.name}</label>
         </div>
         `;
@@ -123,27 +123,44 @@ const createEditPointTemplate = (point) => {
     `;
 };
 
-export default class EditPoint extends AbstractView {
+export default class EditPoint extends SmartView {
   constructor(point) {
     super();
-    this._point = point;
+    this._data = point;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._closeClickHandler = this._closeClickHandler.bind(this);
+    this._changePointTypeHandler = this._changePointTypeHandler.bind(this);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._point);
+    return createEditPointTemplate(this._data);
   }
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
-    this._handlers.formSubmit(this._point);
+    this._handlers.formSubmit(this._data);
   }
 
   _closeClickHandler(evt) {
     evt.preventDefault();
     this._handlers.closeEditPointClick();
+  }
+
+  _changePointTypeHandler(evt) {
+    evt.preventDefault();
+    const pointType = evt.target.dataset.pointType;
+    const routeName = evt.target.dataset.routeName;
+    this.updateData({ route: routeName });
+    this.updateData({
+      offers: Object.assign({}, this._data.offers, { type: pointType }),
+    });
+  }
+
+  _setInnerHandlers() {
+    this.setChangePointEventHandler();
   }
 
   setFormSubmitHandler(callback) {
@@ -154,5 +171,17 @@ export default class EditPoint extends AbstractView {
   setCloseClickHandler(callback) {
     this._handlers.closeEditPointClick = callback;
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._closeClickHandler);
+  }
+
+  setChangePointEventHandler() {
+    const typePointInputs = this.getElement().querySelectorAll('.event__type-input');
+    typePointInputs.forEach((typePoint) => {
+      typePoint.addEventListener('change', this._changePointTypeHandler);
+    });
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormSubmitHandler(this._handlers.formSubmit);
   }
 }
