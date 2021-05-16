@@ -9,7 +9,7 @@ const Mode = {
 export default class Point {
   constructor({ container, changeData, changeMode }) {
     this._container = container;
-    this._point = null;
+    this._data = null;
 
     this._changeData = changeData;
     this._changeMode = changeMode;
@@ -26,7 +26,7 @@ export default class Point {
   }
 
   init(point) {
-    this._point = point;
+    this._data = point;
 
     this._pointComponent = new PointView(point);
     this._editPointComponent = new EditPointView(point);
@@ -64,8 +64,8 @@ export default class Point {
   }
 
   _handleFavoriteClick() {
-    const isFavorite = { isFavorite: !this._point.isFavorite };
-    this._changeData(Object.assign({}, this._point, isFavorite));
+    const isFavorite = { isFavorite: !this._data.isFavorite };
+    this._changeData(Object.assign({}, this._data, isFavorite));
   }
 
   _escKeyDownHandler(evt) {

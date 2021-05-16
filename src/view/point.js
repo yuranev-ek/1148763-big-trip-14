@@ -1,4 +1,4 @@
-import AbstractView from './abstract-view.js';
+import SmartView from './smart-view.js';
 import { formatDate, getDiffOfDates } from '../utils/date.js';
 import { DATE_FORMAT } from '../const.js';
 
@@ -92,17 +92,17 @@ const createPointTemplate = (point) => {
     `;
 };
 
-export default class Point extends AbstractView {
+export default class Point extends SmartView {
   constructor(point) {
     super();
-    this._point = point;
+    this._data = point;
 
     this._editClickHandler = this._editClickHandler.bind(this);
     this._favoriteClickHandler = this._favoriteClickHandler.bind(this);
   }
 
   getTemplate() {
-    return createPointTemplate(this._point);
+    return createPointTemplate(this._data);
   }
 
   _editClickHandler(evt) {

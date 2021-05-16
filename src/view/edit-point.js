@@ -3,6 +3,8 @@ import { ROUTES, CITIES, generateDestination } from '../mock/point.js';
 import { formatDate } from '../utils/date.js';
 import { DATE_FORMAT } from '../const.js';
 import { OFFERS } from '../mock/offer.js';
+import flatpickr from 'flatpickr';
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const createTypeListOfRoutesTemplate = (routes) => {
   return routes
@@ -146,11 +148,13 @@ export default class EditPoint extends SmartView {
   constructor(point) {
     super();
     this._data = point;
+    this._datepicker = null;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
     this._closeClickHandler = this._closeClickHandler.bind(this);
     this._changePointTypeHandler = this._changePointTypeHandler.bind(this);
     this._changeDestinationHandler = this._changeDestinationHandler.bind(this);
+    this._changeDatesHandler = this._changeDatesHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -196,6 +200,7 @@ export default class EditPoint extends SmartView {
   _setInnerHandlers() {
     this.setChangePointEventHandler();
     this.setChangeDestinationHandler();
+    this._setDatepicker();
   }
 
   setFormSubmitHandler(callback) {
@@ -221,9 +226,47 @@ export default class EditPoint extends SmartView {
       .addEventListener('change', this._changeDestinationHandler);
   }
 
+  _setDatepicker() {
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
+
+    if (this._data.dateStart) {
+      this._datepicker = flatpickr(this.getElement().querySelector('#event-start-time-1'), {
+        mode: 'range',
+        dateFormat: 'Y/m/d H:i',
+        defaultDate: this._data.dateStart,
+        enableTime: true,
+        onChange: this._changeDatesHandler,
+      });
+    }
+
+    if (this._data.dateEnd) {
+      this._datepicker = flatpickr(this.getElement().querySelector('#event-end-time-1'), {
+        mode: 'range',
+        dateFormat: 'Y/m/d H:i',
+        defaultDate: this._data.dateEnd,
+        enableTime: true,
+        onChange: this._changeDatesHandler,
+      });
+    }
+  }
+
+  _changeDatesHandler(dates) {
+    const [dateStart, dateEnd] = dates;
+    this.updateData({
+      dateStart,
+    });
+    this.updateData({
+      dateEnd,
+    });
+  }
+
   restoreHandlers() {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._handlers.formSubmit);
+    this._setDatepicker();
     this.setCloseClickHandler(this._handlers.closeEditPointClick);
   }
 }
