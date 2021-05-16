@@ -155,6 +155,7 @@ export default class EditPoint extends SmartView {
     this._changePointTypeHandler = this._changePointTypeHandler.bind(this);
     this._changeDestinationHandler = this._changeDestinationHandler.bind(this);
     this._changeDatesHandler = this._changeDatesHandler.bind(this);
+    this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -263,10 +264,30 @@ export default class EditPoint extends SmartView {
     });
   }
 
+  _formDeleteClickHandler(evt) {
+    evt.preventDefault();
+    this._handlers.deleteClick(this._data);
+  }
+
+  setDeleteClickHandler(callback) {
+    this._handlers.deleteClick = callback;
+    this.getElement().querySelector('.event__reset-btn').addEventListener('click', this._formDeleteClickHandler);
+  }
+
   restoreHandlers() {
     this._setInnerHandlers();
     this.setFormSubmitHandler(this._handlers.formSubmit);
     this._setDatepicker();
     this.setCloseClickHandler(this._handlers.closeEditPointClick);
+    this.setDeleteClickHandler(this._handlers.deleteClick);
+  }
+
+  removeElement() {
+    super.removeElement();
+
+    if (this._datepicker) {
+      this._datepicker.destroy();
+      this._datepicker = null;
+    }
   }
 }

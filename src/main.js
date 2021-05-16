@@ -11,6 +11,7 @@ import EditPointView from './view/edit-point.js';
 import NoPointsView from './view/no-points.js';
 
 import TripPresenter from './presenter/trip.js';
+import PointsModel from './model/points.js';
 
 // mocks
 import { generatePoint } from './mock/point.js';
@@ -41,6 +42,9 @@ renderElement(siteFiltersElement, new FiltersView(), RENDER_POSITION.BEFOREEND);
 
 const sitePointsElement = document.querySelector(APP_ELEMENT_CLASSES.POINTS);
 
+const pointsModel = new PointsModel();
+pointsModel.setPoints(points);
+
 const tripPresenter = new TripPresenter({
   container: sitePointsElement,
   sortComponent: new SortView(),
@@ -48,6 +52,7 @@ const tripPresenter = new TripPresenter({
   noPointsComponent: new NoPointsView(),
   pointComponent: PointView,
   editPointComponent: EditPointView,
+  pointsModel,
 });
 
-tripPresenter.init(points);
+tripPresenter.init();

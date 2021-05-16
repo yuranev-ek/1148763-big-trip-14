@@ -1,11 +1,13 @@
 import PointView from '../view/point.js';
 import EditPointView from '../view/edit-point.js';
 import { renderElement, replaceElement, remove, RENDER_POSITION } from '../utils/render';
+import { UserAction, UpdateType } from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
 };
+
 export default class Point {
   constructor({ container, changeData, changeMode }) {
     this._container = container;
@@ -23,6 +25,7 @@ export default class Point {
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleCloseClick = this._handleCloseClick.bind(this);
     this._escKeyDownHandler = this._escKeyDownHandler.bind(this);
+    this._handleDeleteClick = this._handleDeleteClick.bind(this);
   }
 
   init(point) {
@@ -35,6 +38,7 @@ export default class Point {
     this._pointComponent.setFavoriteClickHandler(this._handleFavoriteClick);
     this._editPointComponent.setFormSubmitHandler(this._handleFormSubmit);
     this._editPointComponent.setCloseClickHandler(this._handleCloseClick);
+    this._editPointComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     renderElement(this._container, this._pointComponent, RENDER_POSITION.BEFOREEND);
   }
@@ -54,8 +58,12 @@ export default class Point {
     this._replacePointToEditPoint();
   }
 
+  _handleDeleteClick(point) {
+    this._changeData(UserAction.DELETE_POINT, UpdateType.MINOR, point);
+  }
+
   _handleFormSubmit(point) {
-    this._changeData(point);
+    this._changeData(UserAction.UPDATE_POINT, UpdateType.MINOR, point);
     this._replaceEditPointToPoint();
   }
 
@@ -65,7 +73,7 @@ export default class Point {
 
   _handleFavoriteClick() {
     const isFavorite = { isFavorite: !this._data.isFavorite };
-    this._changeData(Object.assign({}, this._data, isFavorite));
+    this._changeData(UserAction.UPDATE_POINT, UpdateType.MINOR, Object.assign({}, this._data, isFavorite));
   }
 
   _escKeyDownHandler(evt) {
