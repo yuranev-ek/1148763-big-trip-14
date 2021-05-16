@@ -1,6 +1,6 @@
 import PointPresenter from './point';
 import { renderElement, RENDER_POSITION } from '../utils/render';
-import { SortType } from "../const";
+import { SortType } from '../const';
 import { updateItem } from '../utils/common.js';
 import { getDiffOfDates } from '../utils/date.js';
 
@@ -85,11 +85,10 @@ export default class Trip {
 
   _handleSortTypeChange(sortType) {
     if (this._currentSortType === sortType) {
-      this._points.reverse();
-    } else {
-      this._sortPoints(sortType);
+      return;
     }
 
+    this._sortPoints(sortType);
     this._clearTaskList();
     this._renderPointsList();
   }
@@ -102,11 +101,11 @@ export default class Trip {
           const diffMinutesOfPoint2 = getDiffOfDates(p2.dateEnd, p2.dateStart, 'minute');
 
           if (diffMinutesOfPoint1 > diffMinutesOfPoint2) {
-            return 1;
+            return -1;
           }
 
           if (diffMinutesOfPoint1 < diffMinutesOfPoint2) {
-            return -1;
+            return 1;
           }
 
           if (diffMinutesOfPoint1 === diffMinutesOfPoint2) {
@@ -122,11 +121,11 @@ export default class Trip {
           const price2 = p2.basePrice;
 
           if (price1 > price2) {
-            return 1;
+            return -1;
           }
 
           if (price1 < price2) {
-            return -1;
+            return 1;
           }
 
           if (price1 === price2) {
