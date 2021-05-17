@@ -123,7 +123,7 @@ const generateBasePrice = () => {
   return getRandomInteger(BASE_PRICE_META.MIN, BASE_PRICE_META.MAX);
 };
 
-const generateId = () => {
+export const generateId = () => {
   return '_' + Math.random().toString(36).substr(2, 9);
 };
 

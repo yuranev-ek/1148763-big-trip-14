@@ -27,11 +27,12 @@ const createOptionsOfCities = (cities) => {
     .join('');
 };
 
-const createOffersTemplate = (checkedOffers, offers) => {
-  return offers
-    .map((offer) => {
-      const checked = checkedOffers.findIndex((it) => it.title === offer.title) !== -1 ? 'checked' : '';
-      return `
+const createOffersTemplate = (checkedOffers, offers = []) => {
+  if (offers.length) {
+    return offers
+      .map((offer) => {
+        const checked = checkedOffers.findIndex((it) => it.title === offer.title) !== -1 ? 'checked' : '';
+        return `
         <div class="event__offer-selector">
             <input class="event__offer-checkbox  visually-hidden" id="event-${offer.title}" type="checkbox" name="event-${offer.title}" ${checked}>
             <label class="event__offer-label" for="event-${offer.title}">
@@ -41,21 +42,26 @@ const createOffersTemplate = (checkedOffers, offers) => {
             </label>
         </div>
         `;
-    })
-    .join('');
+      })
+      .join('');
+  } else {
+    return '<div class="event__offer-selector"></div>';
+  }
 };
 
 const createDestinationPhotosTemplate = (photos) => {
-  return photos
-    .map((photo) => {
-      return `
+  if (photos.length) {
+    return photos
+      .map((photo) => {
+        return `
       <img 
         class="event__photo" 
         src="${photo.src}" 
         alt="${photo.description}"
       >`;
-    })
-    .join('');
+      })
+      .join('');
+  }
 };
 
 const createEditPointTemplate = (point) => {
@@ -66,7 +72,7 @@ const createEditPointTemplate = (point) => {
   const optionsOfCitiesTemplate = createOptionsOfCities(CITIES);
   const formattedDateStart = formatDate(dateStart, DATE_FORMAT.DATE_TIME);
   const formattedDateEnd = formatDate(dateEnd, DATE_FORMAT.DATE_TIME);
-  const photosTemplate = createDestinationPhotosTemplate(point.destination.pictures);
+  const photosTemplate = createDestinationPhotosTemplate(destination.pictures);
   const offersTemplate = createOffersTemplate(offers.list, OFFERS[offers.type]);
 
   return `
@@ -144,10 +150,28 @@ const createEditPointTemplate = (point) => {
     `;
 };
 
+const defaultPoint = {
+  basePrice: 0,
+  dateEnd: new Date(),
+  dateStart: new Date(),
+  destination: {
+    name: '',
+    description: '',
+    pictures: [],
+  },
+  isFavorite: '',
+  offers: {
+    type: '',
+    list: [],
+  },
+  route: '',
+};
+
 export default class EditPoint extends SmartView {
+  // todo: обновлять offers, basePrice
   constructor(point) {
     super();
-    this._data = point;
+    this._data = point || defaultPoint;
     this._datepicker = null;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);

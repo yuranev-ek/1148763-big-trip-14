@@ -1,6 +1,7 @@
-import PointPresenter from './point';
-import { renderElement, RENDER_POSITION } from '../utils/render';
-import { SortType, UpdateType, UserAction } from '../const';
+import PointPresenter from './point.js';
+import PointNewPresenter from './point-new.js';
+import { renderElement, RENDER_POSITION } from '../utils/render.js';
+import { SortType, UpdateType, UserAction } from '../const.js';
 import { getDiffOfDates } from '../utils/date.js';
 import { filter } from '../utils/filter.js';
 import { isAfter } from '../utils/date.js';
@@ -35,11 +36,23 @@ export default class Trip {
 
     this._pointsModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
+
+    this._pointNewPresenter = new PointNewPresenter({
+      container: this._pointsListComponent,
+      changeData: this._handleViewAction,
+    });
   }
 
   init() {
     this._renderSort();
     this._renderPointsList();
+  }
+
+  createPoint() {
+    this._filterModel.setFilter(UpdateType.MAJOR);
+    this._currentSortType = SortType.DAY;
+    this._sortComponent.changeCurrentSortType(this._currentSortType);
+    this._pointNewPresenter.init();
   }
 
   _getPoints() {
@@ -99,6 +112,7 @@ export default class Trip {
   }
 
   _clearPointList({ resetSortType = false } = {}) {
+    this._pointNewPresenter.destroy();
     Object.values(this._pointPresenter).forEach((point) => point.destroy());
     this._pointPresenter = {};
 
@@ -141,6 +155,7 @@ export default class Trip {
   }
 
   _handleModeChange() {
+    this._pointNewPresenter.destroy();
     Object.values(this._pointPresenter).forEach((point) => point.resetView());
   }
 

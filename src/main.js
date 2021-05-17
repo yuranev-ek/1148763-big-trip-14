@@ -55,3 +55,10 @@ const filterPresenter = new FilterPresenter(siteFiltersElement, filterModel, poi
 
 filterPresenter.init();
 tripPresenter.init();
+
+console.log(points);
+
+document.querySelector('.trip-main__event-add-btn').addEventListener('click', (evt) => {
+  evt.preventDefault();
+  tripPresenter.createPoint();
+});
