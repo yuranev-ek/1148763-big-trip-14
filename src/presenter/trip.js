@@ -2,6 +2,8 @@ import PointPresenter from './point';
 import { renderElement, RENDER_POSITION } from '../utils/render';
 import { SortType, UpdateType, UserAction } from '../const';
 import { getDiffOfDates } from '../utils/date.js';
+import { filter } from '../utils/filter.js';
+import { isAfter } from '../utils/date.js';
 
 export default class Trip {
   constructor({
@@ -12,11 +14,13 @@ export default class Trip {
     pointComponent,
     editPointComponent,
     pointsModel,
+    filterModel,
   }) {
     this._tripContainer = container;
     this._pointsModel = pointsModel;
+    this._filterModel = filterModel;
     this._pointPresenter = {};
-    this._currentSortType = SortType.DEFAULT;
+    this._currentSortType = SortType.DAY;
 
     this._sortComponent = sortComponent;
     this._pointsListComponent = pointsListComponent;
@@ -30,6 +34,7 @@ export default class Trip {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
 
     this._pointsModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -38,11 +43,18 @@ export default class Trip {
   }
 
   _getPoints() {
+    const filterType = this._filterModel.getFilter();
     const points = this._pointsModel.getPoints().slice();
+    const filteredPoints = filter[filterType](points);
 
     switch (this._currentSortType) {
+      case SortType.DAY:
+        filteredPoints.sort((a, b) => {
+          return isAfter(a.dateStart, b.dateStart) ? 1 : -1;
+        });
+        break;
       case SortType.TIME:
-        points.sort((p1, p2) => {
+        filteredPoints.sort((p1, p2) => {
           const diffMinutesOfPoint1 = getDiffOfDates(p1.dateEnd, p1.dateStart, 'minute');
           const diffMinutesOfPoint2 = getDiffOfDates(p2.dateEnd, p2.dateStart, 'minute');
 
@@ -62,7 +74,7 @@ export default class Trip {
         });
         break;
       case SortType.PRICE:
-        points.sort((p1, p2) => {
+        filteredPoints.sort((p1, p2) => {
           const price1 = p1.basePrice;
           const price2 = p2.basePrice;
 
@@ -83,7 +95,7 @@ export default class Trip {
         break;
     }
 
-    return points;
+    return filteredPoints;
   }
 
   _clearPointList({ resetSortType = false } = {}) {
@@ -91,7 +103,7 @@ export default class Trip {
     this._pointPresenter = {};
 
     if (resetSortType) {
-      this._currentSortType = SortType.DEFAULT;
+      this._currentSortType = SortType.DAY;
       this._sortComponent.changeCurrentSortType(this._currentSortType);
     }
   }
