@@ -1,5 +1,5 @@
 import SmartView from './smart-view.js';
-import { ROUTES, CITIES, generateDestination } from '../mock/point.js';
+import { ROUTES, CITIES, generateDestination, TYPE_OF_ROUTE, generateRoute } from '../mock/point.js';
 import { formatDate } from '../utils/date.js';
 import { DATE_FORMAT } from '../const.js';
 import { OFFERS } from '../mock/offer.js';
@@ -34,8 +34,8 @@ const createOffersTemplate = (checkedOffers, offers = []) => {
         const checked = checkedOffers.findIndex((it) => it.title === offer.title) !== -1 ? 'checked' : '';
         return `
         <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-${offer.title}" type="checkbox" name="event-${offer.title}" ${checked}>
-            <label class="event__offer-label" for="event-${offer.title}">
+            <input class="event__offer-checkbox  visually-hidden" id="${offer.title}" type="checkbox" name="${offer.title}" data-price="${offer.price}" ${checked}>
+            <label class="event__offer-label" for="${offer.title}">
                 <span class="event__offer-title">${offer.title}</span>
                 &plus;&euro;&nbsp;
                 <span class="event__offer-price">${offer.price}</span>
@@ -98,7 +98,14 @@ const createEditPointTemplate = (point) => {
                 <label class="event__label  event__type-output" for="event-destination-1">
                     ${route}
                 </label>
-                <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destination.name}" list="destination-list-1">
+                <input 
+                  class="event__input  event__input--destination" 
+                  id="event-destination-1" 
+                  type="text" 
+                  name="event-destination" 
+                  value="${destination.name}" 
+                  list="destination-list-1"
+                >
                 <datalist id="destination-list-1">
                     ${optionsOfCitiesTemplate}
                 </datalist>
@@ -159,16 +166,16 @@ const defaultPoint = {
     description: '',
     pictures: [],
   },
-  isFavorite: '',
+  isFavorite: false,
   offers: {
-    type: '',
+    type: TYPE_OF_ROUTE.TRIP,
     list: [],
   },
-  route: '',
+  route: generateRoute().name,
 };
 
 export default class EditPoint extends SmartView {
-  // todo: обновлять offers, basePrice
+  // todo: скрывать description, если нет destination
   constructor(point) {
     super();
     this._data = point || defaultPoint;
@@ -180,6 +187,7 @@ export default class EditPoint extends SmartView {
     this._changeDestinationHandler = this._changeDestinationHandler.bind(this);
     this._changeDatesHandler = this._changeDatesHandler.bind(this);
     this._formDeleteClickHandler = this._formDeleteClickHandler.bind(this);
+    this._changeBasePriceHandler = this._changeBasePriceHandler.bind(this);
 
     this._setInnerHandlers();
   }
@@ -190,6 +198,7 @@ export default class EditPoint extends SmartView {
 
   _formSubmitHandler(evt) {
     evt.preventDefault();
+    this.setChangeOffers();
     this._handlers.formSubmit(this._data);
   }
 
@@ -204,7 +213,16 @@ export default class EditPoint extends SmartView {
     const routeName = evt.target.dataset.routeName;
     this.updateData({ route: routeName });
     this.updateData({
-      offers: Object.assign({}, this._data.offers, { type: pointType }),
+      offers: Object.assign({}, { type: pointType, list: [] }),
+    });
+  }
+
+  _changeBasePriceHandler(evt) {
+    evt.preventDefault();
+    const rawValue = evt.target.value;
+    const basePrice = rawValue ? rawValue.match(/(\d+)/)[0] : 0;
+    this.updateData({
+      basePrice,
     });
   }
 
@@ -225,6 +243,7 @@ export default class EditPoint extends SmartView {
   _setInnerHandlers() {
     this.setChangePointEventHandler();
     this.setChangeDestinationHandler();
+    this.setChangeBasePriceHandler();
     this._setDatepicker();
   }
 
@@ -238,10 +257,35 @@ export default class EditPoint extends SmartView {
     this.getElement().querySelector('.event__rollup-btn').addEventListener('click', this._closeClickHandler);
   }
 
+  setChangeBasePriceHandler() {
+    const basePriceInput = this.getElement().querySelector('.event__input--price');
+    basePriceInput.addEventListener('change', this._changeBasePriceHandler);
+  }
+
   setChangePointEventHandler() {
     const typePointInputs = this.getElement().querySelectorAll('.event__type-input');
     typePointInputs.forEach((typePoint) => {
       typePoint.addEventListener('change', this._changePointTypeHandler);
+    });
+  }
+
+  setChangeOffers() {
+    const offersInputs = this.getElement().querySelectorAll('.event__offer-checkbox');
+    const list = [...offersInputs].reduce((acc, cur) => {
+      if (cur.checked) {
+        acc.push({
+          price: cur.dataset.price,
+          title: cur.name,
+        });
+      }
+
+      return acc;
+    }, []);
+    this.updateData({
+      offers: {
+        list,
+        type: this._data.offers.type,
+      },
     });
   }
 

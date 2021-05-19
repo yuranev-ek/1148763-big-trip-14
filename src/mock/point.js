@@ -78,7 +78,7 @@ const DATE_META = {
   DAYS_AFTER: 30,
 };
 
-const generateRoute = () => {
+export const generateRoute = () => {
   return ROUTES[getRandomInteger(0, ROUTES.length - 1)];
 };
 
