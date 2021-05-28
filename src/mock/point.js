@@ -123,10 +123,6 @@ const generateBasePrice = () => {
   return getRandomInteger(BASE_PRICE_META.MIN, BASE_PRICE_META.MAX);
 };
 
-export const generateId = () => {
-  return '_' + Math.random().toString(36).substr(2, 9);
-};
-
 export const generatePoint = () => {
   const route = generateRoute();
   const minDateStart = subtractDays(DATE_META.DAYS_BEFORE);
@@ -135,7 +131,6 @@ export const generatePoint = () => {
   const numberOfOffers = getRandomInteger(0, OFFERS[route.type].length);
 
   return {
-    id: generateId(),
     route: route.name,
     destination: generateDestination(),
     isFavorite: getRandomBoolean(),

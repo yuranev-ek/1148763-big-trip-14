@@ -1,6 +1,5 @@
 import EditPointView from '../view/edit-point.js';
 import { renderElement, remove, RENDER_POSITION } from '../utils/render';
-import { generateId } from '../mock/point.js';
 import { UserAction, UpdateType } from '../const.js';
 
 export default class PointNew {
@@ -9,7 +8,7 @@ export default class PointNew {
 
     this._changeData = changeData;
 
-    this._editPointComponent = null;
+    this._pointEditComponent = null;
 
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleCloseClick = this._handleCloseClick.bind(this);
@@ -18,20 +17,39 @@ export default class PointNew {
   }
 
   init() {
-    this._editPointComponent = new EditPointView();
-    this._editPointComponent.setFormSubmitHandler(this._handleFormSubmit);
-    this._editPointComponent.setCloseClickHandler(this._handleCloseClick);
-    this._editPointComponent.setDeleteClickHandler(this._handleDeleteClick);
+    this._pointEditComponent = new EditPointView();
+    this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._pointEditComponent.setCloseClickHandler(this._handleCloseClick);
+    this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     document.addEventListener('keydown', this._escKeyDownHandler);
 
-    renderElement(this._container, this._editPointComponent, RENDER_POSITION.AFTERBEGIN);
+    renderElement(this._container, this._pointEditComponent, RENDER_POSITION.AFTERBEGIN);
   }
 
   destroy() {
-    remove(this._editPointComponent);
-    this._editPointComponent = null;
+    remove(this._pointEditComponent);
+    this._pointEditComponent = null;
     document.removeEventListener('keydown', this._escKeyDownHandler);
+  }
+
+  setSaving() {
+    this._pointEditComponent.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._pointEditComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this._pointEditComponent.shake(resetFormState);
   }
 
   _handleDeleteClick() {
@@ -39,8 +57,7 @@ export default class PointNew {
   }
 
   _handleFormSubmit(point) {
-    this._changeData(UserAction.ADD_POINT, UpdateType.MINOR, Object.assign(point, { id: generateId() }));
-    this.destroy();
+    this._changeData(UserAction.ADD_POINT, UpdateType.MINOR, point);
   }
 
   _handleCloseClick() {

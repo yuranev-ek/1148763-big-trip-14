@@ -6,36 +6,62 @@ import { OFFERS } from '../mock/offer.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
-const createTypeListOfRoutesTemplate = (routes) => {
+const createTypeListOfRoutesTemplate = (routes, isDisabled) => {
   return routes
     .map((route) => {
       return `
         <div class="event__type-item">
-            <input id="event-type-${route.name}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${route.name}" data-point-type="${route.type}" data-route-name="${route.name}">
-            <label class="event__type-label  event__type-label--${route.name}" for="event-type-${route.name}-1">${route.name}</label>
+            <input 
+              id="event-type-${route.name}-1" 
+              class="event__type-input  visually-hidden" 
+              type="radio" 
+              name="event-type" 
+              value="${route.name}" 
+              data-point-type="${route.type}" 
+              data-route-name="${route.name}"  
+              ${isDisabled ? 'disabled' : ''}
+            >
+            <label 
+              class="event__type-label  event__type-label--${route.name}" 
+              for="event-type-${route.name}-1"
+              ${isDisabled ? 'disabled' : ''}
+            >
+              ${route.name}
+            </label>
         </div>
         `;
     })
     .join('');
 };
 
-const createOptionsOfCities = (cities) => {
+const createOptionsOfCities = (cities, isDisabled) => {
   return cities
     .map((city) => {
-      return `<option value="${city}"></option>`;
+      return `<option ${isDisabled ? 'disabled' : ''} value="${city}"></option>`;
     })
     .join('');
 };
 
-const createOffersTemplate = (checkedOffers, offers = []) => {
+const createOffersTemplate = (checkedOffers, offers = [], isDisabled) => {
   if (offers.length) {
     return offers
       .map((offer) => {
         const checked = checkedOffers.findIndex((it) => it.title === offer.title) !== -1 ? 'checked' : '';
         return `
         <div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="${offer.title}" type="checkbox" name="${offer.title}" data-price="${offer.price}" ${checked}>
-            <label class="event__offer-label" for="${offer.title}">
+            <input 
+              class="event__offer-checkbox  visually-hidden" 
+              id="${offer.title}" 
+              type="checkbox" 
+              name="${offer.title}" 
+              data-price="${offer.price}" ${checked}
+              ${isDisabled ? 'disabled' : ''}
+            >
+            <label 
+              class="event__offer-label" 
+              for="${offer.title}"
+              ${isDisabled ? 'disabled' : ''}
+            >
                 <span class="event__offer-title">${offer.title}</span>
                 &plus;&euro;&nbsp;
                 <span class="event__offer-price">${offer.price}</span>
@@ -65,26 +91,30 @@ const createDestinationPhotosTemplate = (photos) => {
 };
 
 const createEditPointTemplate = (point) => {
-  const { route, destination, basePrice, dateStart, dateEnd, offers } = point;
+  const { route, destination, basePrice, dateStart, dateEnd, offers, isDisabled, isSaving, isDeleting } = point;
 
   const srcToPointIcon = `img/icons/${route}.png`;
-  const typeListOfRoutesTemplate = createTypeListOfRoutesTemplate(ROUTES);
-  const optionsOfCitiesTemplate = createOptionsOfCities(CITIES);
+  const typeListOfRoutesTemplate = createTypeListOfRoutesTemplate(ROUTES, isDisabled);
+  const optionsOfCitiesTemplate = createOptionsOfCities(CITIES, isDisabled);
   const formattedDateStart = formatDate(dateStart, DATE_FORMAT.DATE_TIME);
   const formattedDateEnd = formatDate(dateEnd, DATE_FORMAT.DATE_TIME);
   const photosTemplate = createDestinationPhotosTemplate(destination.pictures);
-  const offersTemplate = createOffersTemplate(offers.list, OFFERS[offers.type]);
+  const offersTemplate = createOffersTemplate(offers.list, OFFERS[offers.type], isDisabled);
 
   return `
     <li class="trip-events__item">
         <form class="event event--edit" action="#" method="post">
         <header class="event__header">
             <div class="event__type-wrapper">
-                <label class="event__type  event__type-btn" for="event-type-toggle-1">
+                <label class="event__type  event__type-btn" for="event-type-toggle-1" ${isDisabled ? 'disabled' : ''}>
                     <span class="visually-hidden">Choose event type</span>
                     <img class="event__type-icon" width="17" height="17" src="${srcToPointIcon}" alt="${route}">
                 </label>
-                <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
+                <input 
+                  class="event__type-toggle  visually-hidden" 
+                  id="event-type-toggle-1" type="checkbox" 
+                  ${isDisabled ? 'disabled' : ''}
+                >
 
                 <div class="event__type-list">
                     <fieldset class="event__type-group">
@@ -105,6 +135,7 @@ const createEditPointTemplate = (point) => {
                   name="event-destination" 
                   value="${destination.name}" 
                   list="destination-list-1"
+                  ${isDisabled ? 'disabled' : ''}
                 >
                 <datalist id="destination-list-1">
                     ${optionsOfCitiesTemplate}
@@ -112,23 +143,68 @@ const createEditPointTemplate = (point) => {
             </div>
 
             <div class="event__field-group  event__field-group--time">
-                <label class="visually-hidden" for="event-start-time-1">From</label>
-                <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formattedDateStart}">
+                <label 
+                  class="visually-hidden" 
+                  for="event-start-time-1"
+                  ${isDisabled ? 'disabled' : ''}
+                >
+                  From
+                </label>
+                <input 
+                  class="event__input  event__input--time" 
+                  id="event-start-time-1" 
+                  type="text" 
+                  name="event-start-time" 
+                  value="${formattedDateStart}"
+                  ${isDisabled ? 'disabled' : ''}
+                >
                 &mdash;
-                <label class="visually-hidden" for="event-end-time-1">To</label>
-                <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formattedDateEnd}">
+                <label 
+                  class="visually-hidden" 
+                  for="event-end-time-1"
+                  ${isDisabled ? 'disabled' : ''}
+                >
+                  To
+                </label>
+                <input 
+                  class="event__input  event__input--time" 
+                  id="event-end-time-1" 
+                  type="text" 
+                  name="event-end-time" 
+                  value="${formattedDateEnd}"
+                  ${isDisabled ? 'disabled' : ''}
+                >
             </div>
 
             <div class="event__field-group  event__field-group--price">
-                <label class="event__label" for="event-price-1">
+                <label class="event__label" for="event-price-1" ${isDisabled ? 'disabled' : ''}>
                     <span class="visually-hidden">Price</span>
                     &euro;
                 </label>
-                <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${basePrice}">
+                <input 
+                  class="event__input  event__input--price" 
+                  id="event-price-1" 
+                  type="text" 
+                  name="event-price" 
+                  value="${basePrice}" 
+                  ${isDisabled ? 'disabled' : ''}
+                >
             </div>
 
-            <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-            <button class="event__reset-btn" type="reset">Delete</button>
+            <button 
+              class="event__save-btn  btn  btn--blue" 
+              type="submit" 
+              ${isDisabled ? 'disabled' : ''}
+            >
+              ${isSaving ? 'Saving...' : 'Save'}
+            </button>
+            <button 
+              class="event__reset-btn" 
+              type="reset" 
+              ${isDisabled ? 'disabled' : ''}
+            >
+              ${isDeleting ? 'Deleting...' : 'Delete'}
+            </button>
             <button class="event__rollup-btn" type="button">
                 <span class="visually-hidden">Open event</span>
             </button>

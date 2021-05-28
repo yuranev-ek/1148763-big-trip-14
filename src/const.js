@@ -11,8 +11,6 @@ export const RENDER_POSITION = {
   BEFOREEND: 'beforeend',
 };
 
-export const POINT_COUNT = 15;
-
 export const APP_ELEMENT_CLASSES = {
   HEADER: '.trip-main',
   INFO: '.trip-main__trip-info',
@@ -20,6 +18,7 @@ export const APP_ELEMENT_CLASSES = {
   FILTERS: '.trip-controls__filters',
   POINTS: '.trip-events',
   POINTS_LIST: '.trip-events__list',
+  NEW_EVENT_BUTTON: '.trip-main__event-add-btn',
 };
 
 export const SortType = {
@@ -38,6 +37,7 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 export const FilterType = {
