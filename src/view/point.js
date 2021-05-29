@@ -40,9 +40,9 @@ const createOffersTemplate = (offers) => {
 };
 
 const createPointTemplate = (point) => {
-  const { route, destination, isFavorite, basePrice, dateStart, dateEnd, offers } = point;
+  const { destination, isFavorite, basePrice, dateStart, dateEnd, offers } = point;
 
-  const srcToPointIcon = `img/icons/${route}.png`;
+  const srcToPointIcon = `img/icons/${offers.type}.png`;
   const classByIsFavorite = isFavorite ? 'event__favorite-btn--active' : '';
 
   const attrDateOfDateStart = formatDate(dateStart, DATE_FORMAT.ATTR_DATE);
@@ -50,7 +50,7 @@ const createPointTemplate = (point) => {
   const attrDateTimeOfDateEnd = formatDate(dateEnd, DATE_FORMAT.ATTR_DATE_TIME);
   const startPointTime = formatDate(dateStart, DATE_FORMAT.TIME);
   const endPointTime = formatDate(dateEnd, DATE_FORMAT.TIME);
-  const PointDay = formatDate(dateStart, DATE_FORMAT.DAY);
+  const pointDay = formatDate(dateStart, DATE_FORMAT.DAY);
   const diffTime = diffConvertedTimeOfPoint(dateEnd, dateStart);
 
   const offersTemplate = createOffersTemplate(offers.list);
@@ -58,11 +58,13 @@ const createPointTemplate = (point) => {
   return `
     <li class="trip-events__item">
       <div class="event">
-          <time class="event__date" datetime="${attrDateOfDateStart}">${PointDay}</time>
+          <time class="event__date" datetime="${attrDateOfDateStart}">
+            ${pointDay}
+          </time>
           <div class="event__type">
-              <img class="event__type-icon" width="42" height="42" src="${srcToPointIcon}" alt="${route}">
+              <img class="event__type-icon" width="42" height="42" src="${srcToPointIcon}" alt="${offers.type}">
           </div>
-          <h3 class="event__title">${route} ${destination.name}</h3>
+          <h3 class="event__title">${offers.type} ${destination.name}</h3>
           <div class="event__schedule">
               <p class="event__time">
               <time class="event__start-time" datetime="${attrDateTimeOfDateStart}">${startPointTime}</time>

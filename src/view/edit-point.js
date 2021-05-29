@@ -1,32 +1,31 @@
 import SmartView from './smart-view.js';
-import { ROUTES, CITIES, generateDestination, TYPE_OF_ROUTE, generateRoute } from '../mock/point.js';
 import { formatDate } from '../utils/date.js';
 import { DATE_FORMAT } from '../const.js';
-import { OFFERS } from '../mock/offer.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
+import { defaultDestinations, defaultOffers } from '../main.js';
 
-const createTypeListOfRoutesTemplate = (routes, isDisabled) => {
-  return routes
-    .map((route) => {
+const createTypeListOfRoutesTemplate = (offers, isDisabled) => {
+  return offers
+    .map((offer) => {
       return `
         <div class="event__type-item">
             <input 
-              id="event-type-${route.name}-1" 
+              id="event-type-${offer.type}-1" 
               class="event__type-input  visually-hidden" 
               type="radio" 
               name="event-type" 
-              value="${route.name}" 
-              data-point-type="${route.type}" 
-              data-route-name="${route.name}"  
+              value="${offer.type}" 
+              data-point-type="${offer.type}" 
+              data-route-name="${offer.type}"  
               ${isDisabled ? 'disabled' : ''}
             >
             <label 
-              class="event__type-label  event__type-label--${route.name}" 
-              for="event-type-${route.name}-1"
+              class="event__type-label  event__type-label--${offer.type}" 
+              for="event-type-${offer.type}-1"
               ${isDisabled ? 'disabled' : ''}
             >
-              ${route.name}
+              ${offer.type}
             </label>
         </div>
         `;
@@ -37,16 +36,18 @@ const createTypeListOfRoutesTemplate = (routes, isDisabled) => {
 const createOptionsOfCities = (cities, isDisabled) => {
   return cities
     .map((city) => {
-      return `<option ${isDisabled ? 'disabled' : ''} value="${city}"></option>`;
+      return `<option ${isDisabled ? 'disabled' : ''} value="${city.name}"></option>`;
     })
     .join('');
 };
 
-const createOffersTemplate = (checkedOffers, offers = [], isDisabled) => {
-  if (offers.length) {
-    return offers
+const createOffersTemplate = (currentOffers, offers = [], isDisabled) => {
+  const desiredOfferList = offers.find((offer) => offer.type === currentOffers.type);
+
+  if (desiredOfferList && desiredOfferList.offers) {
+    return desiredOfferList.offers
       .map((offer) => {
-        const checked = checkedOffers.findIndex((it) => it.title === offer.title) !== -1 ? 'checked' : '';
+        const checked = currentOffers.list.findIndex((it) => it.title === offer.title) !== -1 ? 'checked' : '';
         return `
         <div class="event__offer-selector">
             <input 
@@ -75,31 +76,31 @@ const createOffersTemplate = (checkedOffers, offers = [], isDisabled) => {
   }
 };
 
-const createDestinationPhotosTemplate = (photos) => {
-  if (photos.length) {
-    return photos
-      .map((photo) => {
+const createDestinationPhotosTemplate = (pictures) => {
+  if (pictures.length) {
+    return pictures
+      .map((picture) => {
         return `
       <img 
         class="event__photo" 
-        src="${photo.src}" 
-        alt="${photo.description}"
+        src="${picture.src}" 
+        alt="${picture.description}"
       >`;
       })
       .join('');
   }
 };
 
-const createEditPointTemplate = (point) => {
-  const { route, destination, basePrice, dateStart, dateEnd, offers, isDisabled, isSaving, isDeleting } = point;
+const createPointEditTemplate = (point) => {
+  const { destination, basePrice, dateStart, dateEnd, offers, isDisabled, isSaving, isDeleting } = point;
 
-  const srcToPointIcon = `img/icons/${route}.png`;
-  const typeListOfRoutesTemplate = createTypeListOfRoutesTemplate(ROUTES, isDisabled);
-  const optionsOfCitiesTemplate = createOptionsOfCities(CITIES, isDisabled);
+  const srcToPointIcon = `img/icons/${offers.type}.png`;
+  const typeListOfRoutesTemplate = createTypeListOfRoutesTemplate(defaultOffers, isDisabled);
+  const optionsOfCitiesTemplate = createOptionsOfCities(defaultDestinations, isDisabled);
   const formattedDateStart = formatDate(dateStart, DATE_FORMAT.DATE_TIME);
   const formattedDateEnd = formatDate(dateEnd, DATE_FORMAT.DATE_TIME);
   const photosTemplate = createDestinationPhotosTemplate(destination.pictures);
-  const offersTemplate = createOffersTemplate(offers.list, OFFERS[offers.type], isDisabled);
+  const offersTemplate = createOffersTemplate(offers, defaultOffers, isDisabled);
 
   return `
     <li class="trip-events__item">
@@ -108,7 +109,7 @@ const createEditPointTemplate = (point) => {
             <div class="event__type-wrapper">
                 <label class="event__type  event__type-btn" for="event-type-toggle-1" ${isDisabled ? 'disabled' : ''}>
                     <span class="visually-hidden">Choose event type</span>
-                    <img class="event__type-icon" width="17" height="17" src="${srcToPointIcon}" alt="${route}">
+                    <img class="event__type-icon" width="17" height="17" src="${srcToPointIcon}" alt="${offers.type}">
                 </label>
                 <input 
                   class="event__type-toggle  visually-hidden" 
@@ -126,7 +127,7 @@ const createEditPointTemplate = (point) => {
 
             <div class="event__field-group  event__field-group--destination">
                 <label class="event__label  event__type-output" for="event-destination-1">
-                    ${route}
+                    ${offers.type}
                 </label>
                 <input 
                   class="event__input  event__input--destination" 
@@ -244,10 +245,9 @@ const defaultPoint = {
   },
   isFavorite: false,
   offers: {
-    type: TYPE_OF_ROUTE.TRIP,
+    type: '',
     list: [],
   },
-  route: generateRoute().name,
 };
 
 export default class EditPoint extends SmartView {
@@ -269,7 +269,7 @@ export default class EditPoint extends SmartView {
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._data);
+    return createPointEditTemplate(this._data);
   }
 
   _formSubmitHandler(evt) {
@@ -286,8 +286,8 @@ export default class EditPoint extends SmartView {
   _changePointTypeHandler(evt) {
     evt.preventDefault();
     const pointType = evt.target.dataset.pointType;
-    const routeName = evt.target.dataset.routeName;
-    this.updateData({ route: routeName });
+    // const routeName = evt.target.dataset.routeName;
+    // this.updateData({ route: routeName });
     this.updateData({
       offers: Object.assign({}, { type: pointType, list: [] }),
     });
@@ -305,11 +305,9 @@ export default class EditPoint extends SmartView {
   _changeDestinationHandler(evt) {
     evt.preventDefault();
     const newDestinationName = evt.target.value;
-    const isCityExist = CITIES.findIndex((city) => city === newDestinationName) !== -1;
-    if (isCityExist) {
-      const newDestination = Object.assign({}, generateDestination(), {
-        name: newDestinationName,
-      });
+    const desiredCity = defaultDestinations.find((city) => city.name === newDestinationName);
+    if (desiredCity) {
+      const newDestination = Object.assign({}, desiredCity);
       this.updateData({
         destination: newDestination,
       });

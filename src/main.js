@@ -61,6 +61,16 @@ const sitePointsElement = document.querySelector(APP_ELEMENT_CLASSES.POINTS);
 
 const pointsModel = new PointsModel();
 const api = new Api(END_POINT, AUTHORIZATION);
+export let defaultDestinations = [];
+export let defaultOffers = [];
+
+api.getDestinations().then((destinationsData) => {
+  defaultDestinations = destinationsData;
+});
+
+api.getOffers().then((offersData) => {
+  defaultOffers = offersData;
+});
 
 api
   .getPoints()
