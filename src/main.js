@@ -1,4 +1,3 @@
-// templates
 import TotalCostView from './view/total-cost.js';
 import MenuView, { MenuItem } from './view/menu.js';
 import RouteInformationView from './view/route-information.js';
@@ -6,7 +5,7 @@ import RouteInformationView from './view/route-information.js';
 import SortView from './view/sort.js';
 import PointsListView from './view/points-list.js';
 import PointView from './view/point.js';
-import EditPointView from './view/edit-point.js';
+import EditPointView from './view/point-edit.js';
 import NoPointsView from './view/no-points.js';
 import StatisticsView from './view/statistics.js';
 import LoadingView from './view/loading.js';
@@ -21,6 +20,8 @@ import { APP_ELEMENT_CLASSES, UpdateType } from './const.js';
 import { generateToken } from './utils/common.js';
 
 import Api from './api.js';
+
+// todo: возможно необходимо будет почистить от ненужных элементов в header
 
 let token = localStorage.getItem('token');
 if (token == undefined) {

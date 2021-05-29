@@ -234,27 +234,34 @@ const createPointEditTemplate = (point) => {
     `;
 };
 
-const defaultPoint = {
-  basePrice: 0,
-  dateEnd: new Date(),
-  dateStart: new Date(),
-  destination: {
+const createDefaultPoint = () => {
+  const defaultDestination = {
     name: '',
     description: '',
     pictures: [],
-  },
-  isFavorite: false,
-  offers: {
+  };
+  const defaultOffer = {
     type: '',
     list: [],
-  },
+  };
+
+  const destination = defaultDestinations ? defaultDestinations[0] : defaultDestination;
+  const offers = defaultOffers ? { list: defaultOffers[0].offers, type: defaultOffers[0].type } : defaultOffer;
+
+  return {
+    basePrice: 0,
+    dateEnd: new Date(),
+    dateStart: new Date(),
+    destination,
+    isFavorite: false,
+    offers,
+  };
 };
 
 export default class EditPoint extends SmartView {
-  // todo: скрывать description, если нет destination
   constructor(point) {
     super();
-    this._data = point || defaultPoint;
+    this._data = point || createDefaultPoint();
     this._datepicker = null;
 
     this._formSubmitHandler = this._formSubmitHandler.bind(this);
@@ -286,8 +293,6 @@ export default class EditPoint extends SmartView {
   _changePointTypeHandler(evt) {
     evt.preventDefault();
     const pointType = evt.target.dataset.pointType;
-    // const routeName = evt.target.dataset.routeName;
-    // this.updateData({ route: routeName });
     this.updateData({
       offers: Object.assign({}, { type: pointType, list: [] }),
     });

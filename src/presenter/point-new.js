@@ -1,4 +1,4 @@
-import EditPointView from '../view/edit-point.js';
+import EditPointView from '../view/point-edit.js';
 import { renderElement, remove, RENDER_POSITION } from '../utils/render';
 import { UserAction, UpdateType } from '../const.js';
 
@@ -8,7 +8,7 @@ export default class PointNew {
 
     this._changeData = changeData;
 
-    this._pointEditComponent = null;
+    this._pointNewComponent = null;
 
     this._handleFormSubmit = this._handleFormSubmit.bind(this);
     this._handleCloseClick = this._handleCloseClick.bind(this);
@@ -17,24 +17,24 @@ export default class PointNew {
   }
 
   init() {
-    this._pointEditComponent = new EditPointView();
-    this._pointEditComponent.setFormSubmitHandler(this._handleFormSubmit);
-    this._pointEditComponent.setCloseClickHandler(this._handleCloseClick);
-    this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
+    this._pointNewComponent = new EditPointView();
+    this._pointNewComponent.setFormSubmitHandler(this._handleFormSubmit);
+    this._pointNewComponent.setCloseClickHandler(this._handleCloseClick);
+    this._pointNewComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     document.addEventListener('keydown', this._escKeyDownHandler);
 
-    renderElement(this._container, this._pointEditComponent, RENDER_POSITION.AFTERBEGIN);
+    renderElement(this._container, this._pointNewComponent, RENDER_POSITION.AFTERBEGIN);
   }
 
   destroy() {
-    remove(this._pointEditComponent);
-    this._pointEditComponent = null;
+    remove(this._pointNewComponent);
+    this._pointNewComponent = null;
     document.removeEventListener('keydown', this._escKeyDownHandler);
   }
 
   setSaving() {
-    this._pointEditComponent.updateData({
+    this._pointNewComponent.updateData({
       isDisabled: true,
       isSaving: true,
     });
@@ -42,14 +42,14 @@ export default class PointNew {
 
   setAborting() {
     const resetFormState = () => {
-      this._pointEditComponent.updateData({
+      this._pointNewComponent.updateData({
         isDisabled: false,
         isSaving: false,
         isDeleting: false,
       });
     };
 
-    this._pointEditComponent.shake(resetFormState);
+    this._pointNewComponent.shake(resetFormState);
   }
 
   _handleDeleteClick() {

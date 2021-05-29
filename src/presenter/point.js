@@ -1,5 +1,5 @@
 import PointView from '../view/point.js';
-import PointEditView from '../view/edit-point.js';
+import PointEditView from '../view/point-edit.js';
 import { renderElement, replaceElement, remove, RENDER_POSITION } from '../utils/render';
 import { UserAction, UpdateType } from '../const.js';
 
@@ -116,7 +116,6 @@ export default class Point {
 
   _handleFormSubmit(point) {
     this._changeData(UserAction.UPDATE_POINT, UpdateType.MINOR, point);
-    this._replaceEditPointToPoint();
   }
 
   _handleCloseClick() {
