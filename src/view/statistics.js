@@ -1,7 +1,7 @@
 import SmartView from './smart-view.js';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import { diffConvertedTimeOfPoint, diffOfConvertedTimeOfPoint } from './point.js';
+import { diffConvertedTimeOfPoint } from './point.js';
 
 const CHART_NAMES = {
   MONEY: 'MONEY',
@@ -10,7 +10,7 @@ const CHART_NAMES = {
 };
 
 const returnUniqueRouteTypes = (points) => {
-  const onlyRouteTypes = points.slice().map((point) => point.route);
+  const onlyRouteTypes = points.slice().map((point) => point.offers.type);
   const mapRouteTypes = new Map();
   onlyRouteTypes.forEach((route) => mapRouteTypes.set(route, null));
   return mapRouteTypes;
@@ -112,9 +112,9 @@ const renderMoneyChart = (ctx, points) => {
   const uniqueRouteTypesMap = returnUniqueRouteTypes(points);
 
   points.forEach((point) => {
-    let currentPrice = uniqueRouteTypesMap.get(point.route);
+    let currentPrice = uniqueRouteTypesMap.get(point.offers.type);
     const accPrice = currentPrice !== null ? (currentPrice += point.basePrice) : point.basePrice;
-    uniqueRouteTypesMap.set(point.route, accPrice);
+    uniqueRouteTypesMap.set(point.offers.type, accPrice);
   });
 
   const sortedRouteTypesByQuantity = [...uniqueRouteTypesMap].sort(sortRoutesByMostValue);
@@ -135,9 +135,9 @@ const renderTypeChart = (ctx, points) => {
   const uniqueRouteTypesMap = returnUniqueRouteTypes(points);
 
   points.forEach((point) => {
-    let currentQuantity = uniqueRouteTypesMap.get(point.route);
+    let currentQuantity = uniqueRouteTypesMap.get(point.offers.type);
     const accQuantity = currentQuantity !== null ? (currentQuantity += 1) : 1;
-    uniqueRouteTypesMap.set(point.route, accQuantity);
+    uniqueRouteTypesMap.set(point.offers.type, accQuantity);
   });
 
   const sortedRouteTypesByQuantity = [...uniqueRouteTypesMap].sort(sortRoutesByMostValue);
@@ -158,10 +158,10 @@ const renderTimeSpendChart = (ctx, points) => {
   const uniqueRouteTypesMap = returnUniqueRouteTypes(points);
 
   points.forEach((point) => {
-    let currentTimeSpend = uniqueRouteTypesMap.get(point.route);
+    let currentTimeSpend = uniqueRouteTypesMap.get(point.offers.type);
     const diffTimeSpend = new Date(point.dateEnd) - new Date(point.dateStart);
     const accTimeSpend = currentTimeSpend !== null ? (currentTimeSpend += diffTimeSpend) : diffTimeSpend;
-    uniqueRouteTypesMap.set(point.route, accTimeSpend);
+    uniqueRouteTypesMap.set(point.offers.type, accTimeSpend);
   });
 
   const sortedRouteTypesByQuantity = [...uniqueRouteTypesMap].sort(sortRoutesByMostValue);
