@@ -1,5 +1,5 @@
 import EditPointView from '../view/point-edit.js';
-import { renderElement, remove, RENDER_POSITION } from '../utils/render';
+import { renderElement, remove, RenderPosition } from '../utils/render';
 import { UserAction, UpdateType } from '../const.js';
 
 export default class PointNew {
@@ -24,7 +24,7 @@ export default class PointNew {
 
     document.addEventListener('keydown', this._escKeyDownHandler);
 
-    renderElement(this._container, this._pointNewComponent, RENDER_POSITION.AFTERBEGIN);
+    renderElement(this._container, this._pointNewComponent, RenderPosition.AFTERBEGIN);
   }
 
   destroy() {

@@ -1,4 +1,4 @@
-export const DATE_FORMAT = {
+export const DateFormat = {
   ATTR_DATE: 'DD-MM-YYYY',
   ATTR_DATE_TIME: 'DD-MM-YYYYTHH:mm',
   DATE_TIME: 'DD/MM/YYYY HH:mm',
@@ -6,12 +6,7 @@ export const DATE_FORMAT = {
   DAY: 'MMM D',
 };
 
-export const RENDER_POSITION = {
-  AFTERBEGIN: 'afterbegin',
-  BEFOREEND: 'beforeend',
-};
-
-export const APP_ELEMENT_CLASSES = {
+export const AppElementClasses = {
   HEADER: '.trip-main',
   INFO: '.trip-main__trip-info',
   MENU: '.trip-controls__navigation',

@@ -15,8 +15,8 @@ import FilterPresenter from './presenter/filter.js';
 import PointsModel from './model/points.js';
 import FilterModel from './model/filter.js';
 
-import { renderElement, RENDER_POSITION, remove } from './utils/render.js';
-import { APP_ELEMENT_CLASSES, UpdateType } from './const.js';
+import { renderElement, RenderPosition, remove } from './utils/render.js';
+import { AppElementClasses, UpdateType } from './const.js';
 import { generateToken } from './utils/common.js';
 
 import Api from './api.js';
@@ -34,15 +34,15 @@ const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 const points = [];
 const filterModel = new FilterModel();
 
-const siteHeaderElement = document.querySelector(APP_ELEMENT_CLASSES.HEADER);
-renderElement(siteHeaderElement, new RouteInformationView(points), RENDER_POSITION.AFTERBEGIN);
-const siteInfoElement = siteHeaderElement.querySelector(APP_ELEMENT_CLASSES.INFO);
-renderElement(siteInfoElement, new TotalCostView(points), RENDER_POSITION.BEFOREEND);
-const siteMenuElement = siteHeaderElement.querySelector(APP_ELEMENT_CLASSES.MENU);
+const siteHeaderElement = document.querySelector(AppElementClasses.HEADER);
+renderElement(siteHeaderElement, new RouteInformationView(points), RenderPosition.AFTERBEGIN);
+const siteInfoElement = siteHeaderElement.querySelector(AppElementClasses.INFO);
+renderElement(siteInfoElement, new TotalCostView(points), RenderPosition.BEFOREEND);
+const siteMenuElement = siteHeaderElement.querySelector(AppElementClasses.MENU);
 
 const siteMenuComponent = new MenuView();
 let statisticsComponent = null;
-const siteFiltersElement = siteHeaderElement.querySelector(APP_ELEMENT_CLASSES.FILTERS);
+const siteFiltersElement = siteHeaderElement.querySelector(AppElementClasses.FILTERS);
 
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
@@ -53,12 +53,12 @@ const handleSiteMenuClick = (menuItem) => {
     case MenuItem.STATISTICS:
       tripPresenter.destroy();
       statisticsComponent = new StatisticsView(pointsModel.getPoints());
-      renderElement(sitePointsElement, statisticsComponent, RENDER_POSITION.BEFOREEND);
+      renderElement(sitePointsElement, statisticsComponent, RenderPosition.BEFOREEND);
       break;
   }
 };
 
-const sitePointsElement = document.querySelector(APP_ELEMENT_CLASSES.POINTS);
+const sitePointsElement = document.querySelector(AppElementClasses.POINTS);
 
 const pointsModel = new PointsModel();
 const api = new Api(END_POINT, AUTHORIZATION);
@@ -82,7 +82,7 @@ api
     pointsModel.setPoints(UpdateType.INIT, []);
   })
   .finally(() => {
-    renderElement(siteMenuElement, siteMenuComponent, RENDER_POSITION.BEFOREEND);
+    renderElement(siteMenuElement, siteMenuComponent, RenderPosition.BEFOREEND);
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   });
 
@@ -103,7 +103,7 @@ const filterPresenter = new FilterPresenter(siteFiltersElement, filterModel, poi
 filterPresenter.init();
 tripPresenter.init();
 
-document.querySelector(APP_ELEMENT_CLASSES.NEW_EVENT_BUTTON).addEventListener('click', (evt) => {
+document.querySelector(AppElementClasses.NEW_EVENT_BUTTON).addEventListener('click', (evt) => {
   evt.preventDefault();
   tripPresenter.createPoint();
 });

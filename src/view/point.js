@@ -1,6 +1,6 @@
 import SmartView from './smart-view.js';
 import { formatDate, getDiffOfDates } from '../utils/date.js';
-import { DATE_FORMAT } from '../const.js';
+import { DateFormat } from '../const.js';
 
 export const diffConvertedTimeOfPoint = (dateEnd, dateStart) => {
   const diffMinutesOfPoint = getDiffOfDates(dateEnd, dateStart, 'minute') % 60;
@@ -45,12 +45,12 @@ const createPointTemplate = (point) => {
   const srcToPointIcon = `img/icons/${offers.type}.png`;
   const classByIsFavorite = isFavorite ? 'event__favorite-btn--active' : '';
 
-  const attrDateOfDateStart = formatDate(dateStart, DATE_FORMAT.ATTR_DATE);
-  const attrDateTimeOfDateStart = formatDate(dateStart, DATE_FORMAT.ATTR_DATE_TIME);
-  const attrDateTimeOfDateEnd = formatDate(dateEnd, DATE_FORMAT.ATTR_DATE_TIME);
-  const startPointTime = formatDate(dateStart, DATE_FORMAT.TIME);
-  const endPointTime = formatDate(dateEnd, DATE_FORMAT.TIME);
-  const pointDay = formatDate(dateStart, DATE_FORMAT.DAY);
+  const attrDateOfDateStart = formatDate(dateStart, DateFormat.ATTR_DATE);
+  const attrDateTimeOfDateStart = formatDate(dateStart, DateFormat.ATTR_DATE_TIME);
+  const attrDateTimeOfDateEnd = formatDate(dateEnd, DateFormat.ATTR_DATE_TIME);
+  const startPointTime = formatDate(dateStart, DateFormat.TIME);
+  const endPointTime = formatDate(dateEnd, DateFormat.TIME);
+  const pointDay = formatDate(dateStart, DateFormat.DAY);
   const diffTime = diffConvertedTimeOfPoint(dateEnd, dateStart);
 
   const offersTemplate = createOffersTemplate(offers.list);

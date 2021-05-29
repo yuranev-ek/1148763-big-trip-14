@@ -1,6 +1,6 @@
 import AbstractView from '../view/abstract-view.js';
 
-export const RENDER_POSITION = {
+export const RenderPosition = {
   AFTERBEGIN: 'afterbegin',
   BEFOREEND: 'beforeend',
 };
@@ -15,10 +15,10 @@ export const renderElement = (container, element, place) => {
   }
 
   switch (place) {
-    case RENDER_POSITION.AFTERBEGIN:
+    case RenderPosition.AFTERBEGIN:
       container.prepend(element);
       break;
-    case RENDER_POSITION.BEFOREEND:
+    case RenderPosition.BEFOREEND:
       container.append(element);
       break;
   }

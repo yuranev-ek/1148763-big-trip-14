@@ -1,5 +1,5 @@
 import AbstractView from './abstract-view.js';
-import { DATE_FORMAT } from '../const.js';
+import { DateFormat } from '../const.js';
 import { formatDate } from '../utils/date.js';
 
 const createTripTitleTemplate = (points) => {
@@ -18,8 +18,8 @@ const createTripTitleTemplate = (points) => {
 const createRouteInformationTemplate = (points = []) => {
   if (points.length) {
     const tripTitleTemplate = createTripTitleTemplate(points);
-    const startTripDay = formatDate(points[0].dateStart, DATE_FORMAT.DAY);
-    const endTripDay = formatDate(points[points.length - 1].dateEnd, DATE_FORMAT.DAY);
+    const startTripDay = formatDate(points[0].dateStart, DateFormat.DAY);
+    const endTripDay = formatDate(points[points.length - 1].dateEnd, DateFormat.DAY);
 
     return `
     <section class="trip-main__trip-info  trip-info">

@@ -1,6 +1,6 @@
 import SmartView from './smart-view.js';
 import { formatDate } from '../utils/date.js';
-import { DATE_FORMAT } from '../const.js';
+import { DateFormat } from '../const.js';
 import flatpickr from 'flatpickr';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 import { defaultDestinations, defaultOffers } from '../main.js';
@@ -97,8 +97,8 @@ const createPointEditTemplate = (point) => {
   const srcToPointIcon = `img/icons/${offers.type}.png`;
   const typeListOfRoutesTemplate = createTypeListOfRoutesTemplate(defaultOffers, isDisabled);
   const optionsOfCitiesTemplate = createOptionsOfCities(defaultDestinations, isDisabled);
-  const formattedDateStart = formatDate(dateStart, DATE_FORMAT.DATE_TIME);
-  const formattedDateEnd = formatDate(dateEnd, DATE_FORMAT.DATE_TIME);
+  const formattedDateStart = formatDate(dateStart, DateFormat.DATE_TIME);
+  const formattedDateEnd = formatDate(dateEnd, DateFormat.DATE_TIME);
   const photosTemplate = createDestinationPhotosTemplate(destination.pictures);
   const offersTemplate = createOffersTemplate(offers, defaultOffers, isDisabled);
 

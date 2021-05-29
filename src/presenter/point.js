@@ -1,6 +1,6 @@
 import PointView from '../view/point.js';
 import PointEditView from '../view/point-edit.js';
-import { renderElement, replaceElement, remove, RENDER_POSITION } from '../utils/render';
+import { renderElement, replaceElement, remove, RenderPosition } from '../utils/render';
 import { UserAction, UpdateType } from '../const.js';
 
 const Mode = {
@@ -49,7 +49,7 @@ export default class Point {
     this._pointEditComponent.setDeleteClickHandler(this._handleDeleteClick);
 
     if (prevPointComponent === null || prevPointEditComponent === null) {
-      renderElement(this._container, this._pointComponent, RENDER_POSITION.BEFOREEND);
+      renderElement(this._container, this._pointComponent, RenderPosition.BEFOREEND);
       return;
     }
 

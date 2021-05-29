@@ -1,7 +1,7 @@
 import PointPresenter, { State as PointPresenterViewState } from './point.js';
 import PointNewPresenter from './point-new.js';
-import { renderElement, RENDER_POSITION, remove } from '../utils/render.js';
-import { SortType, UpdateType, UserAction, APP_ELEMENT_CLASSES } from '../const.js';
+import { renderElement, RenderPosition, remove } from '../utils/render.js';
+import { SortType, UpdateType, UserAction, AppElementClasses } from '../const.js';
 import { getDiffOfDates } from '../utils/date.js';
 import { filter } from '../utils/filter.js';
 import { isAfter } from '../utils/date.js';
@@ -139,7 +139,7 @@ export default class Trip {
   }
 
   _renderSort() {
-    renderElement(this._tripContainer, this._sortComponent, RENDER_POSITION.BEFOREEND);
+    renderElement(this._tripContainer, this._sortComponent, RenderPosition.BEFOREEND);
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 
@@ -149,14 +149,14 @@ export default class Trip {
       return;
     }
 
-    renderElement(this._tripContainer, this._pointsListComponent, RENDER_POSITION.BEFOREEND);
+    renderElement(this._tripContainer, this._pointsListComponent, RenderPosition.BEFOREEND);
 
     const points = this._getPoints();
     points && points.length ? this._renderPoints() : this._renderNoPoints();
   }
 
   _renderNoPoints() {
-    renderElement(this._tripContainer, this._noPointsComponent, RENDER_POSITION.BEFOREEND);
+    renderElement(this._tripContainer, this._noPointsComponent, RenderPosition.BEFOREEND);
   }
 
   _renderPoints() {
@@ -254,7 +254,7 @@ export default class Trip {
   }
 
   _renderLoading() {
-    const containerElement = document.querySelector(APP_ELEMENT_CLASSES.POINTS);
-    renderElement(containerElement, this._loadingComponent, RENDER_POSITION.BEFOREEND);
+    const containerElement = document.querySelector(AppElementClasses.POINTS);
+    renderElement(containerElement, this._loadingComponent, RenderPosition.BEFOREEND);
   }
 }
