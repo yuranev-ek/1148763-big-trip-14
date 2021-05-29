@@ -70,6 +70,11 @@ export default class Points extends Observer {
   }
 
   static adaptToServer(point) {
+    const offers =
+      point.offers !== null
+        ? point.offers.list.map((offer) => ({ price: Number(offer.price), title: offer.title }))
+        : [];
+
     const adaptedPoint = Object.assign({}, point, {
       id: point.id,
       base_price: Number(point.basePrice),
@@ -77,15 +82,7 @@ export default class Points extends Observer {
       date_to: point.dateEnd,
       is_favorite: point.isFavorite,
       destination: point.destination,
-      offers:
-        point.offers !== null
-          ? point.offers.list.map((offer) => {
-              return {
-                price: Number(offer.price),
-                title: offer.title,
-              };
-            })
-          : [],
+      offers,
       type: point.offers !== null && point.offers.type,
     });
 

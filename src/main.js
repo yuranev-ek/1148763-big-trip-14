@@ -1,7 +1,4 @@
-import TotalCostView from './view/total-cost.js';
 import MenuView, { MenuItem } from './view/menu.js';
-import RouteInformationView from './view/route-information.js';
-
 import SortView from './view/sort.js';
 import PointsListView from './view/points-list.js';
 import PointView from './view/point.js';
@@ -21,8 +18,6 @@ import { generateToken } from './utils/common.js';
 
 import Api from './api.js';
 
-// todo: возможно необходимо будет почистить от ненужных элементов в header
-
 let token = localStorage.getItem('token');
 if (token == undefined) {
   localStorage.setItem('token', generateToken());
@@ -31,13 +26,8 @@ if (token == undefined) {
 const AUTHORIZATION = `Basic ${token}`;
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 
-const points = [];
 const filterModel = new FilterModel();
-
 const siteHeaderElement = document.querySelector(AppElementClasses.HEADER);
-renderElement(siteHeaderElement, new RouteInformationView(points), RenderPosition.AFTERBEGIN);
-const siteInfoElement = siteHeaderElement.querySelector(AppElementClasses.INFO);
-renderElement(siteInfoElement, new TotalCostView(points), RenderPosition.BEFOREEND);
 const siteMenuElement = siteHeaderElement.querySelector(AppElementClasses.MENU);
 
 const siteMenuComponent = new MenuView();
@@ -62,8 +52,8 @@ const sitePointsElement = document.querySelector(AppElementClasses.POINTS);
 
 const pointsModel = new PointsModel();
 const api = new Api(END_POINT, AUTHORIZATION);
-export let defaultDestinations = [];
-export let defaultOffers = [];
+let defaultDestinations = [];
+let defaultOffers = [];
 
 api.getDestinations().then((destinationsData) => {
   defaultDestinations = destinationsData;
@@ -107,3 +97,5 @@ document.querySelector(AppElementClasses.NEW_EVENT_BUTTON).addEventListener('cli
   evt.preventDefault();
   tripPresenter.createPoint();
 });
+
+export { defaultDestinations, defaultOffers };
