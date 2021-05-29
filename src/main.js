@@ -18,10 +18,16 @@ import FilterModel from './model/filter.js';
 
 import { renderElement, RENDER_POSITION, remove } from './utils/render.js';
 import { APP_ELEMENT_CLASSES, UpdateType } from './const.js';
+import { generateToken } from './utils/common.js';
 
 import Api from './api.js';
 
-const AUTHORIZATION = 'Basic hS2sd3dfSwcl1sa2j'; // TODO: сделать нормально
+let token = localStorage.getItem('token');
+if (token == undefined) {
+  localStorage.setItem('token', generateToken());
+  token = localStorage.getItem('token');
+}
+const AUTHORIZATION = `Basic ${token}`;
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 
 const points = [];
