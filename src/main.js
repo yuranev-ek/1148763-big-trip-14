@@ -14,22 +14,15 @@ import FilterModel from './model/filter.js';
 
 import { renderElement, RenderPosition, remove } from './utils/render.js';
 import { AppElementClasses, UpdateType } from './const.js';
-import { generateToken } from './utils/common.js';
+import { getToken } from './utils/auth.js';
 
 import Api from './api.js';
 
-let token = localStorage.getItem('token');
-if (token == undefined) {
-  localStorage.setItem('token', generateToken());
-  token = localStorage.getItem('token');
-}
-const AUTHORIZATION = `Basic ${token}`;
+const AUTHORIZATION = `Basic ${getToken()}`;
 const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 
-const filterModel = new FilterModel();
 const siteHeaderElement = document.querySelector(AppElementClasses.HEADER);
 const siteMenuElement = siteHeaderElement.querySelector(AppElementClasses.MENU);
-
 const siteMenuComponent = new MenuView();
 let statisticsComponent = null;
 const siteFiltersElement = siteHeaderElement.querySelector(AppElementClasses.FILTERS);
@@ -75,6 +68,8 @@ api
     renderElement(siteMenuElement, siteMenuComponent, RenderPosition.BEFOREEND);
     siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
   });
+
+const filterModel = new FilterModel();
 
 const tripPresenter = new TripPresenter({
   container: sitePointsElement,
