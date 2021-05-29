@@ -70,10 +70,6 @@ export default class Sort extends AbstractView {
     }
   }
 
-  changeCurrentSortType(currentSortType) {
-    this._currentSortType = currentSortType;
-  }
-
   changeSortInput(sortName) {
     if (this._sortInputs !== null) {
       this._sortInputs.forEach((sortInput) => {

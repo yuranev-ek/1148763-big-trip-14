@@ -12,7 +12,3 @@ export const getRandomBoolean = () => {
 export const sumByKey = (array, key) => {
   return array.reduce((acc, cur) => cur[key], 0);
 };
-
-export const generateToken = () => {
-  return Math.random().toString(36).substr(2);
-};

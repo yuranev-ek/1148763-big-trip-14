@@ -67,7 +67,7 @@ export default class Trip {
   createPoint() {
     this._filterModel.setFilter(UpdateType.MAJOR);
     this._currentSortType = SortType.DAY;
-    this._sortComponent.changeCurrentSortType(this._currentSortType);
+    this._sortComponent.changeSortInput(this._currentSortType);
     this._pointNewPresenter.init();
   }
 
@@ -134,7 +134,7 @@ export default class Trip {
 
     if (resetSortType) {
       this._currentSortType = SortType.DAY;
-      this._sortComponent.changeCurrentSortType(this._currentSortType);
+      this._sortComponent.changeSortInput(this._currentSortType);
     }
   }
 
@@ -186,7 +186,7 @@ export default class Trip {
     }
 
     this._currentSortType = sortType;
-    this._sortComponent.changeCurrentSortType(this._currentSortType);
+    this._sortComponent.changeSortInput(this._currentSortType);
     this._clearPointList();
     this._renderPointsList();
   }
