@@ -72,13 +72,13 @@ export const OFFERS = {
 };
 
 export const generateOffers = (type, num) => {
-  const SLICED_OFFERS_BY_TYPE = OFFERS[type].slice();
+  const offersIndexes = new Array(OFFERS[type].length).fill();
   const offers = [];
 
   while (num > offers.length && OFFERS[type].length > num) {
-    const randomIndex = getRandomInteger(0, SLICED_OFFERS_BY_TYPE.length - 1);
-    offers.push(SLICED_OFFERS_BY_TYPE[randomIndex]);
-    SLICED_OFFERS_BY_TYPE.splice(randomIndex, 1);
+    const randomIndex = getRandomInteger(0, offersIndexes.length - 1);
+    offers.push(OFFERS[type][randomIndex]);
+    offersIndexes.splice(randomIndex, 1);
   }
 
   return offers;
