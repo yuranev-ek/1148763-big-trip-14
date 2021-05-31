@@ -77,10 +77,10 @@ export default class Points extends Observer {
 
     const adaptedPoint = Object.assign({}, point, {
       id: point.id,
-      base_price: Number(point.basePrice),
-      date_from: point.dateStart,
-      date_to: point.dateEnd,
-      is_favorite: point.isFavorite,
+      'base_price': Number(point.basePrice),
+      'date_from': point.dateStart,
+      'date_to': point.dateEnd,
+      'is_favorite': point.isFavorite,
       destination: point.destination,
       offers,
       type: point.offers !== null && point.offers.type,

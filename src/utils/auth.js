@@ -4,7 +4,7 @@ const generateToken = () => {
 
 export const getToken = () => {
   let token = localStorage.getItem('token');
-  if (token == undefined) {
+  if (token === undefined) {
     localStorage.setItem('token', generateToken());
     token = localStorage.getItem('token');
   }
