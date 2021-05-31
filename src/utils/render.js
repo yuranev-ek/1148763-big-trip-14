@@ -1,5 +1,9 @@
-import { RENDER_POSITION } from '../const.js';
 import AbstractView from '../view/abstract-view.js';
+
+export const RenderPosition = {
+  AFTERBEGIN: 'afterbegin',
+  BEFOREEND: 'beforeend',
+};
 
 export const renderElement = (container, element, place) => {
   if (container instanceof AbstractView) {
@@ -11,10 +15,10 @@ export const renderElement = (container, element, place) => {
   }
 
   switch (place) {
-    case RENDER_POSITION.AFTERBEGIN:
+    case RenderPosition.AFTERBEGIN:
       container.prepend(element);
       break;
-    case RENDER_POSITION.BEFOREEND:
+    case RenderPosition.BEFOREEND:
       container.append(element);
       break;
   }
@@ -38,9 +42,18 @@ export const replaceElement = (newChild, oldChild) => {
 
   const parent = oldChild.parentElement;
 
-  if (parent === null || oldChild === null || newChild === null) {
+  if (parent === null || newChild === null) {
     throw new Error('Cannot replace unexisting elements');
   }
 
   parent.replaceChild(newChild, oldChild);
+};
+
+export const remove = (component) => {
+  if (component === null) {
+    return;
+  }
+
+  component.getElement().remove();
+  component.removeElement();
 };

@@ -1,91 +1,96 @@
-// templates
-import TotalCostView from './view/total-cost.js';
-import MenuView from './view/menu.js';
-import FiltersView from './view/filters.js';
+import MenuView, { MenuItem } from './view/menu.js';
 import SortView from './view/sort.js';
-import RouteInformationView from './view/route-information.js';
-import ListOfEventsView from './view/list-of-events.js';
-import EventView from './view/event.js';
-import EditEventView from './view/edit-event.js';
-import NoEventView from './view/no-events.js';
+import PointsListView from './view/points-list.js';
+import PointView from './view/point.js';
+import EditPointView from './view/point-edit.js';
+import NoPointsView from './view/no-points.js';
+import StatisticsView from './view/statistics.js';
+import LoadingView from './view/loading.js';
 
-// mocks
-import { generateEvent } from './mock/event.js';
+import TripPresenter from './presenter/trip.js';
+import FilterPresenter from './presenter/filter.js';
+import PointsModel from './model/points.js';
+import FilterModel from './model/filter.js';
 
-// utils
-import { isAfter } from './utils/date.js';
-import { renderElement, replaceElement } from './utils/render.js';
+import { renderElement, RenderPosition, remove } from './utils/render.js';
+import { AppElementClasses, UpdateType } from './const.js';
+import { getToken } from './utils/auth.js';
 
-// const
-import { RENDER_POSITION, EVENT_COUNT, APP_ELEMENT_CLASSES } from './const.js';
+import Api from './api.js';
 
-// logic
-const events = new Array(EVENT_COUNT)
-  .fill()
-  .map(generateEvent)
-  .sort((a, b) => {
-    return isAfter(a.dateStart, b.dateStart) ? 1 : -1;
-  });
+const AUTHORIZATION = `Basic ${getToken()}`;
+const END_POINT = 'https://14.ecmascript.pages.academy/big-trip';
 
-const siteHeaderElement = document.querySelector(APP_ELEMENT_CLASSES.HEADER);
-renderElement(siteHeaderElement, new RouteInformationView(events), RENDER_POSITION.AFTERBEGIN);
+const siteHeaderElement = document.querySelector(AppElementClasses.HEADER);
+const siteMenuElement = siteHeaderElement.querySelector(AppElementClasses.MENU);
+const siteMenuComponent = new MenuView();
+let statisticsComponent = null;
+const siteFiltersElement = siteHeaderElement.querySelector(AppElementClasses.FILTERS);
 
-const siteInfoElement = siteHeaderElement.querySelector(APP_ELEMENT_CLASSES.INFO);
-renderElement(siteInfoElement, new TotalCostView(events), RENDER_POSITION.BEFOREEND);
-
-const siteMenuElement = siteHeaderElement.querySelector(APP_ELEMENT_CLASSES.MENU);
-renderElement(siteMenuElement, new MenuView(), RENDER_POSITION.BEFOREEND);
-
-const siteFiltersElement = siteHeaderElement.querySelector(APP_ELEMENT_CLASSES.FILTERS);
-renderElement(siteFiltersElement, new FiltersView(), RENDER_POSITION.BEFOREEND);
-
-const siteEventsElement = document.querySelector(APP_ELEMENT_CLASSES.EVENTS);
-renderElement(siteEventsElement, new SortView(), RENDER_POSITION.BEFOREEND);
-renderElement(siteEventsElement, new ListOfEventsView(), RENDER_POSITION.BEFOREEND);
-
-const siteListOfEventsTemplate = siteEventsElement.querySelector(APP_ELEMENT_CLASSES.LIST_OF_EVENTS);
-
-const renderEvent = (event) => {
-  const eventElement = new EventView(event);
-  const editEventElement = new EditEventView(event);
-
-  const replaceEventToEditEvent = () => {
-    replaceElement(editEventElement, eventElement);
-  };
-
-  const replaceEditEventToEvent = () => {
-    replaceElement(eventElement, editEventElement);
-  };
-
-  const onEscKeyDown = (evt) => {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      evt.preventDefault();
-      replaceEditEventToEvent();
-      document.removeEventListener('keydown', onEscKeyDown);
-    }
-  };
-
-  const onClose = () => {
-    replaceEditEventToEvent();
-    document.removeEventListener('keydown', onEscKeyDown);
-  };
-
-  const onOpen = () => {
-    replaceEventToEditEvent();
-    document.addEventListener('keydown', onEscKeyDown);
-  };
-
-  eventElement.setEditClickHandler(onOpen);
-
-  editEventElement.setFormSubmitHandler(onClose);
-
-  editEventElement.setCloseClickHandler(onClose);
-
-  renderElement(siteListOfEventsTemplate, eventElement, RENDER_POSITION.BEFOREEND);
+const handleSiteMenuClick = (menuItem) => {
+  switch (menuItem) {
+    case MenuItem.TRIP:
+      tripPresenter.init();
+      remove(statisticsComponent);
+      break;
+    case MenuItem.STATISTICS:
+      tripPresenter.destroy();
+      statisticsComponent = new StatisticsView(pointsModel.getPoints());
+      renderElement(sitePointsElement, statisticsComponent, RenderPosition.BEFOREEND);
+      break;
+  }
 };
 
-if (events.length) {
-  events.forEach((event) => renderEvent(event));
-} else {
-  renderElement(siteEventsElement, new NoEventView(), RENDER_POSITION.BEFOREEND);
-}
+const sitePointsElement = document.querySelector(AppElementClasses.POINTS);
+
+const pointsModel = new PointsModel();
+const api = new Api(END_POINT, AUTHORIZATION);
+let defaultDestinations = [];
+let defaultOffers = [];
+
+api.getDestinations().then((destinationsData) => {
+  defaultDestinations = destinationsData;
+});
+
+api.getOffers().then((offersData) => {
+  defaultOffers = offersData;
+});
+
+api
+  .getPoints()
+  .then((points) => {
+    pointsModel.setPoints(UpdateType.INIT, points);
+  })
+  .catch(() => {
+    pointsModel.setPoints(UpdateType.INIT, []);
+  })
+  .finally(() => {
+    renderElement(siteMenuElement, siteMenuComponent, RenderPosition.BEFOREEND);
+    siteMenuComponent.setMenuClickHandler(handleSiteMenuClick);
+  });
+
+const filterModel = new FilterModel();
+
+const tripPresenter = new TripPresenter({
+  container: sitePointsElement,
+  sortComponent: new SortView(),
+  pointsListComponent: new PointsListView(),
+  noPointsComponent: new NoPointsView(),
+  loadingComponent: new LoadingView(),
+  pointComponent: PointView,
+  editPointComponent: EditPointView,
+  pointsModel,
+  filterModel,
+  api,
+});
+const filterPresenter = new FilterPresenter(siteFiltersElement, filterModel, pointsModel);
+
+filterPresenter.init();
+tripPresenter.init();
+
+document.querySelector(AppElementClasses.NEW_EVENT_BUTTON).addEventListener('click', (evt) => {
+  evt.preventDefault();
+  tripPresenter.createPoint();
+});
+
+export { defaultDestinations, defaultOffers };
