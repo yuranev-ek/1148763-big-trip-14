@@ -48,6 +48,8 @@ export default class Trip {
   }
 
   init() {
+    this.destroy();
+
     this._renderSort();
     this._renderPointsList();
 

@@ -32,8 +32,8 @@ const siteFiltersElement = siteHeaderElement.querySelector(AppElementClasses.FIL
 const handleSiteMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TRIP:
-      tripPresenter.init();
       remove(statisticsComponent);
+      tripPresenter.init();
       break;
     case MenuItem.STATISTICS:
       tripPresenter.resetFilterAndSort();
@@ -101,6 +101,8 @@ tripPresenter.init();
 
 document.querySelector(AppElementClasses.NEW_EVENT_BUTTON).addEventListener('click', (evt) => {
   evt.preventDefault();
+  handleSiteMenuClick(MenuItem.TRIP);
+  siteMenuComponent.setMenuItem(MenuItem.TRIP);
   tripPresenter.createPoint();
 });
 
