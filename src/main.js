@@ -3,9 +3,9 @@ import SortView from './view/sort.js';
 import PointsListView from './view/points-list.js';
 import PointView from './view/point.js';
 import EditPointView from './view/point-edit.js';
-import NoPointsView from './view/no-points.js';
+import EmptyPointListView from './view/empty-point-list';
 import StatisticsView from './view/statistics.js';
-import LoadingView from './view/loading.js';
+import LoaderView from './view/loader.js';
 
 import TripPresenter from './presenter/trip.js';
 import FilterPresenter from './presenter/filter.js';
@@ -75,8 +75,8 @@ const tripPresenter = new TripPresenter({
   container: sitePointsElement,
   sortComponent: new SortView(),
   pointsListComponent: new PointsListView(),
-  noPointsComponent: new NoPointsView(),
-  loadingComponent: new LoadingView(),
+  emptyPointListComponent: new EmptyPointListView(),
+  loaderComponent: new LoaderView(),
   pointComponent: PointView,
   editPointComponent: EditPointView,
   pointsModel,

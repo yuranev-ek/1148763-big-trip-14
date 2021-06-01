@@ -39,3 +39,9 @@ export const FilterType = {
   FUTURE: 'Future',
   PAST: 'Past',
 };
+
+export const State = {
+  SAVING: 'SAVING',
+  DELETING: 'DELETING',
+  ABORTING: 'ABORTING',
+};

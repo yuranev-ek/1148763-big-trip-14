@@ -1,13 +1,13 @@
 import AbstractView from './abstract-view.js';
 
-const createLoadingTemplate = () => {
+const createLoaderTemplate = () => {
   return `<p class="trip-events__msg">
     Loading...
   </p>`;
 };
 
-export default class Loading extends AbstractView {
+export default class Loader extends AbstractView {
   getTemplate() {
-    return createLoadingTemplate();
+    return createLoaderTemplate();
   }
 }

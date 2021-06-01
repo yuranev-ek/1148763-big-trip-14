@@ -16,23 +16,21 @@ const returnUniqueRouteTypes = (points) => {
   return mapRouteTypes;
 };
 
-const sortRoutesByMostValue = (a, b) => {
-  const value1 = a[1];
-  const value2 = b[1];
+const sortRoutesByMostValue = (routeA, routeB) => {
+  const routeValueA = routeA[1];
+  const routeValueB = routeB[1];
 
-  if (value1 > value2) {
+  if (routeValueA > routeValueB) {
     return -1;
   }
 
-  if (value1 < value2) {
+  if (routeValueA < routeValueB) {
     return 1;
   }
 
-  if (value1 === value2) {
+  if (routeValueA === routeValueB) {
     return 0;
   }
-
-  return null;
 };
 
 const renderChart = ({ title, ctx, labels, data, formatter }) => {

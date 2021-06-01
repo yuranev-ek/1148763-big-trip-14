@@ -82,9 +82,9 @@ const createOffersTemplate = (currentOffers, offers = [], isDisabled) => {
           </div>
         </section>
       `;
-  } else {
-    return '';
   }
+
+  return '';
 };
 
 const createDestinationPhotosTemplate = (pictures) => {

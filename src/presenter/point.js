@@ -1,18 +1,13 @@
 import PointView from '../view/point.js';
 import PointEditView from '../view/point-edit.js';
 import { renderElement, replaceElement, remove, RenderPosition } from '../utils/render';
-import { UserAction, UpdateType } from '../const.js';
+import { UserAction, UpdateType, State } from '../const.js';
 
 const Mode = {
   DEFAULT: 'DEFAULT',
   EDITING: 'EDITING',
 };
 
-export const State = {
-  SAVING: 'SAVING',
-  DELETING: 'DELETING',
-  ABORTING: 'ABORTING',
-};
 export default class Point {
   constructor({ container, changeData, changeMode }) {
     this._container = container;

@@ -1,7 +1,7 @@
-import PointPresenter, { State as PointPresenterViewState } from './point.js';
+import PointPresenter from './point.js';
 import PointNewPresenter from './point-new.js';
 import { renderElement, RenderPosition, remove } from '../utils/render.js';
-import { SortType, UpdateType, UserAction, AppElementClasses } from '../const.js';
+import { SortType, UpdateType, UserAction, AppElementClasses, State as PointPresenterViewState } from '../const.js';
 import { getDiffOfDates } from '../utils/date.js';
 import { filter } from '../utils/filter.js';
 import { isAfter } from '../utils/date.js';
@@ -11,10 +11,10 @@ export default class Trip {
     container,
     sortComponent,
     pointsListComponent,
-    noPointsComponent,
+    emptyPointListComponent,
     pointComponent,
     editPointComponent,
-    loadingComponent,
+    loaderComponent,
     pointsModel,
     filterModel,
     api,
@@ -29,10 +29,10 @@ export default class Trip {
 
     this._sortComponent = sortComponent;
     this._pointsListComponent = pointsListComponent;
-    this._noPointsComponent = noPointsComponent;
+    this._emptyPointListComponent = emptyPointListComponent;
     this._pointComponent = pointComponent;
     this._editPointComponent = editPointComponent;
-    this._loadingComponent = loadingComponent;
+    this._loaderComponent = loaderComponent;
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -59,7 +59,7 @@ export default class Trip {
 
     remove(this._pointsListComponent);
     remove(this._sortComponent);
-    remove(this._loadingComponent);
+    remove(this._loaderComponent);
 
     this._pointsModel.removeObserver(this._handleModelEvent);
   }
@@ -98,8 +98,6 @@ export default class Trip {
           if (diffMinutesOfPoint1 === diffMinutesOfPoint2) {
             return 0;
           }
-
-          return null;
         });
         break;
       case SortType.PRICE:
@@ -118,8 +116,6 @@ export default class Trip {
           if (price1 === price2) {
             return 0;
           }
-
-          return null;
         });
         break;
     }
@@ -156,7 +152,7 @@ export default class Trip {
   }
 
   _renderNoPoints() {
-    renderElement(this._tripContainer, this._noPointsComponent, RenderPosition.BEFOREEND);
+    renderElement(this._tripContainer, this._emptyPointListComponent, RenderPosition.BEFOREEND);
   }
 
   _renderPoints() {
@@ -244,7 +240,7 @@ export default class Trip {
         break;
       case UpdateType.INIT:
         this._isLoading = false;
-        remove(this._loadingComponent);
+        remove(this._loaderComponent);
         this._renderPointsList();
         break;
     }
@@ -255,6 +251,6 @@ export default class Trip {
 
   _renderLoading() {
     const containerElement = document.querySelector(AppElementClasses.POINTS);
-    renderElement(containerElement, this._loadingComponent, RenderPosition.BEFOREEND);
+    renderElement(containerElement, this._loaderComponent, RenderPosition.BEFOREEND);
   }
 }
