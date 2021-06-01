@@ -8,6 +8,7 @@ export const DateFormat = {
 
 export const AppElementClasses = {
   HEADER: '.trip-main',
+  INFO: '.trip-main__trip-info',
   MENU: '.trip-controls__navigation',
   FILTERS: '.trip-controls__filters',
   POINTS: '.trip-events',

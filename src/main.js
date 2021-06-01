@@ -6,6 +6,8 @@ import EditPointView from './view/point-edit.js';
 import EmptyPointListView from './view/empty-point-list';
 import StatisticsView from './view/statistics.js';
 import LoaderView from './view/loader.js';
+import TotalCostView from './view/total-cost.js';
+import RouteInformationView from './view/route-information.js';
 
 import TripPresenter from './presenter/trip.js';
 import FilterPresenter from './presenter/filter.js';
@@ -41,6 +43,12 @@ const handleSiteMenuClick = (menuItem) => {
   }
 };
 
+const renderRouteInformation = (points) => {
+  renderElement(siteHeaderElement, new RouteInformationView(points), RenderPosition.AFTERBEGIN);
+  const siteInfoElement = siteHeaderElement.querySelector(AppElementClasses.INFO);
+  renderElement(siteInfoElement, new TotalCostView(points), RenderPosition.BEFOREEND);
+};
+
 const sitePointsElement = document.querySelector(AppElementClasses.POINTS);
 
 const pointsModel = new PointsModel();
@@ -60,9 +68,11 @@ api
   .getPoints()
   .then((points) => {
     pointsModel.setPoints(UpdateType.INIT, points);
+    renderRouteInformation(points);
   })
   .catch(() => {
     pointsModel.setPoints(UpdateType.INIT, []);
+    renderRouteInformation([]);
   })
   .finally(() => {
     renderElement(siteMenuElement, siteMenuComponent, RenderPosition.BEFOREEND);
