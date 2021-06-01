@@ -12,8 +12,6 @@ export default class Trip {
     sortComponent,
     pointsListComponent,
     emptyPointListComponent,
-    pointComponent,
-    editPointComponent,
     loaderComponent,
     pointsModel,
     filterModel,
@@ -30,8 +28,6 @@ export default class Trip {
     this._sortComponent = sortComponent;
     this._pointsListComponent = pointsListComponent;
     this._emptyPointListComponent = emptyPointListComponent;
-    this._pointComponent = pointComponent;
-    this._editPointComponent = editPointComponent;
     this._loaderComponent = loaderComponent;
 
     this._handleViewAction = this._handleViewAction.bind(this);

@@ -1,6 +1,6 @@
 import AbstractView from './abstract-view.js';
 
-const createFiltersTemplate = (filters, currentFilterType) => {
+const createFiltersTemplate = (filters, currentFilterType, isDisabled) => {
   return `
     <form class="trip-filters" action="#" method="get">
         <div class="trip-filters__filter">
@@ -12,8 +12,15 @@ const createFiltersTemplate = (filters, currentFilterType) => {
             value="${filters.EVERYTHING}" 
             ${filters.EVERYTHING === currentFilterType ? 'checked' : ''}
             data-filter-type="${filters.EVERYTHING}"
+            ${isDisabled ? 'disabled' : ''}
           >
-          <label class="trip-filters__filter-label" for="filter-${filters.EVERYTHING}">${filters.EVERYTHING}</label>
+          <label 
+            class="trip-filters__filter-label" 
+            for="filter-${filters.EVERYTHING}"
+            ${isDisabled ? 'disabled' : ''}
+          >
+            ${filters.EVERYTHING}
+          </label>
         </div>
 
         <div class="trip-filters__filter">
@@ -25,8 +32,15 @@ const createFiltersTemplate = (filters, currentFilterType) => {
             value="${filters.FUTURE}" 
             ${filters.FUTURE === currentFilterType ? 'checked' : ''}
             data-filter-type="${filters.FUTURE}"
+            ${isDisabled ? 'disabled' : ''}
           >
-          <label class="trip-filters__filter-label" for="filter-${filters.FUTURE}">${filters.FUTURE}</label>
+          <label 
+            class="trip-filters__filter-label" 
+            for="filter-${filters.FUTURE}"
+            ${isDisabled ? 'disabled' : ''}
+          >
+            ${filters.FUTURE}
+          </label>
         </div>
 
         <div class="trip-filters__filter">
@@ -38,8 +52,15 @@ const createFiltersTemplate = (filters, currentFilterType) => {
             value="${filters.PAST}" 
             ${filters.PAST === currentFilterType ? 'checked' : ''}
             data-filter-type="${filters.PAST}"
+            ${isDisabled ? 'disabled' : ''}
           >
-          <label class="trip-filters__filter-label" for="filter-${filters.PAST}">${filters.PAST}</label>
+          <label 
+            class="trip-filters__filter-label" 
+            for="filter-${filters.PAST}"
+            ${isDisabled ? 'disabled' : ''}
+          >
+            ${filters.PAST}
+          </label>
         </div>
 
         <button class="visually-hidden" type="submit">Accept filter</button>
@@ -48,16 +69,17 @@ const createFiltersTemplate = (filters, currentFilterType) => {
 };
 
 export default class Filters extends AbstractView {
-  constructor(filters, currentFilterType) {
+  constructor(filters, currentFilterType, isDisabled) {
     super();
     this._filters = filters;
     this._currentFilter = currentFilterType;
+    this._isDisabled = isDisabled;
 
     this._filterTypeChangeHandler = this._filterTypeChangeHandler.bind(this);
   }
 
   getTemplate() {
-    return createFiltersTemplate(this._filters, this._currentFilter);
+    return createFiltersTemplate(this._filters, this._currentFilter, this._isDisabled);
   }
 
   _filterTypeChangeHandler(evt) {
