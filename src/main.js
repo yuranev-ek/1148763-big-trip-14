@@ -36,6 +36,7 @@ const handleSiteMenuClick = (menuItem) => {
       remove(statisticsComponent);
       break;
     case MenuItem.STATISTICS:
+      tripPresenter.resetFilterAndSort();
       tripPresenter.destroy();
       statisticsComponent = new StatisticsView(pointsModel.getPoints());
       renderElement(sitePointsElement, statisticsComponent, RenderPosition.BEFOREEND);
